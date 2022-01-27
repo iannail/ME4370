@@ -1,4 +1,4 @@
 \newcommand\Lab{Lab01} 			% Change lab number to current lab
-\title{Lab 01 \\\textbf{Print LCD}}	% Change Lab number and subtitle
+\title{Lab 01 \\\textbf{Print LCD}}	% Change Lab title and subtitle
 \author{Logan Barber, Ian Nail}
 \date{\today}
