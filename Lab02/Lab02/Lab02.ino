@@ -27,9 +27,14 @@ const int p = 4;
 int startStopReset = 18;
 
 bool buttonState = true;
-int minutes = 10; //start time -> CAN CHANGE TO WHATEVER TIME YOU WANT
-int seconds = 9;  //start time -> CAN CHANGE TO WHATEVER TIME YOU WANT
+int minutes = 2; //start time -> CAN CHANGE TO WHATEVER TIME YOU WANT
+int seconds = 0;  //start time -> CAN CHANGE TO WHATEVER TIME YOU WANT
 int totalMinutes = 0;
+int minutesTens = 0;
+int minutesOnes = 0;
+int secondsTens = 0;
+int secondsOnes = 0;
+int secondsTemp = 0;
 float totalSeconds = minutes*60 + seconds;
 float totalMilliseconds = totalSeconds*1000;
 float totalMicroseconds = totalMilliseconds*1000;
@@ -66,31 +71,37 @@ void loop()
 
   clearLEDs();
   pickSegment(1);
-  pickNumber(0);
+  pickNumber(minutesTens);
   delayMicroseconds(del);
  
   clearLEDs();
   pickSegment(2);
   dispDec(2);
-  pickNumber(1);
+  pickNumber(minutesOnes);
   delayMicroseconds(del);
  
   clearLEDs();
   pickSegment(3);
-  pickNumber(2);
+  pickNumber(secondsTens);
   delayMicroseconds(del);
  
   clearLEDs();
   pickSegment(4);
-  pickNumber(3);
+  pickNumber(secondsOnes);
   delayMicroseconds(del);
  
   totalMicroseconds = totalMicroseconds - 10000; //totalMilliseconds++' for stopwatch
   totalMilliseconds = totalMicroseconds/1000;
-  totalSeconds = int(totalMilliseconds/1000)+1;
-  totalMinutes = int(totalSeconds/60)+1;
+  totalSeconds = (totalMilliseconds/1000+1);
+ 
+  totalMinutes = totalSeconds/60;
+  minutesTens = totalMinutes/10;
+  minutesOnes = totalMinutes%10;
+  secondsTemp = int(totalSeconds)%60;
+  secondsTens = secondsTemp/10;
+  secondsOnes = secondsTemp%10;
   
-  Serial.println(totalSeconds+1);
+  Serial.println(secondsTens);
   
   if (digitalRead(startStopReset)) // checks if button is pressed
   {
