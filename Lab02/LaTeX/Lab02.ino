@@ -1,9 +1,112 @@
 // AUTHORS: A. LOGAN BARBER; IAN NAIL
+<<<<<<< HEAD
 // FILE NAME: LCD_Dpad.ino
 // LAST UPDATED: 19 JANUARY 2022
 //
 //  PURPOSE: THIS FILE IS THE MAIN FILE FOR DISPLAYING A RECIPE ON AN LCD AND BEING ABLE TO SCROLL USING TWO BUTTONS.
 // 
+=======
+// FILE NAME: Lab02.ino
+// LAST UPDATED: 28 JANUARY 2022
+/*
+ *  PURPOSE: THIS FILE IS THE MAIN FILE FOR DISPLAYING A RECIPE ON AN LCD AND BEING ABLE TO SCROLL USING TWO BUTTONS.
+ *       THIS FILE ALSO UTILIZES AND 4-7 SEGMENT DISPLAY AS A 10 MINUTE TIMER.
+ */ 
+
+/*
+ * BUTTON0:
+ * 
+ * DIGITAL PIN: 27
+ * 
+ * PORT: A
+ * 
+ * PORT PIN: 5
+ */
+
+ /*
+ * BUTTON1:
+ * 
+ * DIGITAL PIN: 28
+ * 
+ * PORT: A
+ * 
+ * PORT PIN: 6
+ */
+
+ /*
+ * BUTTON2:
+ * 
+ * DIGITAL PIN: 29
+ * 
+ * PORT: A
+ * 
+ * PORT PIN: 7
+ */
+
+ /*
+  * LCD 4-7 SEGMENT DISPLAY
+  * 
+  * PIN 1: 
+  *      DIGITAL PIN: 10
+  *      PORT: B
+  *      PORT PIN: 4
+  *      
+  * PIN 2:
+  *      DIGITAL PIN: 50
+  *      PORT: B
+  *      PORT PIN: 3
+  *      
+  * PIN 3:
+  *      DIGITAL PIN: 13
+  *      PORT: B
+  *      PORT PIN: 7
+  *      
+  * PIN 4: 
+  *      DIGITAL PIN: 51
+  *      PORT: B
+  *      PORT PIN: 2
+  *      
+  * PIN 5:
+  *      DIGITAL PIN: 12
+  *      PORT: B
+  *      PORT PIN: 6
+  *      
+  * PIN 6:
+  *      DIGITAL PIN: 22
+  *      PORT: A
+  *      PORT PIN: 0
+  *      
+  * PIN 7:
+  *      DIGITAL PIN: 52
+  *      PORT: B
+  *      PORT PIN: 1
+  *      
+  * PIN 8:
+  *      DIGITAL PIN: 23
+  *      PORT: A
+  *      PORT PIN: 1
+  *      
+  * PIN 9:
+  *      DIGITAL PIN: 24
+  *      PORT: A
+  *      PORT PIN: 2
+  *      
+  * PIN 10:
+  *      DIGITAL PIN: 11
+  *      PORT: B
+  *      PORT PIN: 5
+  *      
+  * PIN 11:
+  *      DIGITAL PIN: 53
+  *      PORT: B
+  *      PORT PIN: 0
+  *      
+  * PIN 12:
+  *      DIGITAL PIN: 25
+  *      PORT: A
+  *      PORT PIN: 3
+  */
+>>>>>>> refs/remotes/origin/master
  
 // INCLUDE LIBRARIES
 #include <LiquidCrystal_I2C.h>
@@ -105,18 +208,8 @@ void setup()
 // LOOP FOREVER
 void loop()
 {
-     // IF BUTTON1 IS LOW THEN SCROLL UP
-     if((PINA & 0xE0) == 0xA0)
-     {
-          // DEBOUNCE THE BUTTON1
-          delay(100);
-          if((PINA & 0xE0) == 0xA0)
-          {
-            scroll_up();
-          }
-     }
-     // ELSE IF BUTTON2 IS LOW SCROLL DOWN
-     else if((PINA & 0xE0) == 0xC0)
+     // ELSE IF BUTTON0 IS LOW SCROLL DOWN
+     if((PINA & 0xE0) == 0xC0)
      {
           // DEBOUNCE BUTTON2
           delay(100);
@@ -125,7 +218,19 @@ void loop()
             scroll_down();
           }
      }
-     // IF BUTTON 0 IS LOW CHANGE THE BUTTON STATE
+     
+     // IF BUTTON1 IS LOW THEN SCROLL UP
+     else if((PINA & 0xE0) == 0xA0)
+     {
+          // DEBOUNCE THE BUTTON1
+          delay(100);
+          if((PINA & 0xE0) == 0xA0)
+          {
+            scroll_up();
+          }
+     }
+     
+     // IF BUTTON 2 IS LOW CHANGE THE BUTTON STATE
      else if((PINA & 0xE0) == 0x60)
      {
           delay(100);
@@ -286,28 +391,28 @@ void pickNumber(int x) //changes value of number
                PORTB = ONE; 
                break;
           case 2: 
-            PORTB = TWO; 
-            break;
+               PORTB = TWO; 
+               break;
           case 3: 
-            PORTB = THREE; 
+               PORTB = THREE; 
             break;
           case 4: 
-            PORTB = FOUR; 
-            break;
+               PORTB = FOUR; 
+               break;
           case 5: 
-            PORTB = FIVE; 
-            break;
+               PORTB = FIVE; 
+               break;
           case 6: 
-            PORTB = SIX; 
-            break;
+               PORTB = SIX; 
+               break;
           case 7: 
-            PORTB = SEVEN; 
-            break;
+               PORTB = SEVEN; 
+               break;
           case 8: 
-            PORTB = EIGHT; 
-            break;
+               PORTB = EIGHT; 
+               break;
           case 9: 
-            PORTB = NINE; 
-            break;
+               PORTB = NINE; 
+               break;
      }
 }
