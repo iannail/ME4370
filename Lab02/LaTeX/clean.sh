@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # A small script to clean up the mess left by TexShop when building PDFs
-rm $(find * | grep .synctex)
-rm $(find * | grep .aux)
-rm $(find * | grep .log)
+rm -Rf $(find * | grep .synctex)
+rm -Rf $(find * | grep .aux)
+rm -Rf $(find * | grep .log)
 
 # Get rid of python junk
-rm $(find * | grep .pyc)
+rm -Rf $(find * | grep .pyc)
 
 # Get rid of Mac junk
-rm $(find * | grep .DS_Store)
+rm -Rf $(find * | grep .DS_Store)
 
 
