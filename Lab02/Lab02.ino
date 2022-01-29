@@ -1,11 +1,4 @@
 // AUTHORS: A. LOGAN BARBER; IAN NAIL
-<<<<<<< HEAD
-// FILE NAME: LCD_Dpad.ino
-// LAST UPDATED: 19 JANUARY 2022
-//
-//  PURPOSE: THIS FILE IS THE MAIN FILE FOR DISPLAYING A RECIPE ON AN LCD AND BEING ABLE TO SCROLL USING TWO BUTTONS.
-// 
-=======
 // FILE NAME: Lab02.ino
 // LAST UPDATED: 28 JANUARY 2022
 /*
@@ -106,7 +99,6 @@
   *      PORT: A
   *      PORT PIN: 3
   */
->>>>>>> refs/remotes/origin/master
  
 // INCLUDE LIBRARIES
 #include <LiquidCrystal_I2C.h>
@@ -160,11 +152,30 @@ const uint8_t D4 = 0xEE; // 0b11101110
 const uint8_t arrD[4] = {D4, D3, D2, D1};
 
 // MESSAGE TO PRINT
-char message0[] = "Hello World!";
-char message1[] = "Hallo!";
-char message2[] = "Wie gehts";
-const uint8_t msgArrSize = 3;
-char* msgArr[msgArrSize] = {message0, message1, message2};
+char message0[] = "Double Chocolate";
+char message1[] = "Flower Brownies";
+char message2[] = "1/2 Cup";
+char message3[] = "Unsalted Butter";
+char message4[] = "1 Gram";
+char message5[] = "Flower";
+char message6[] = "1/4 Cup ";
+char message7[] = "Chocolate Chips";
+char message8[] = "1 Tablespoon";
+char message9[] = "Molasses";
+char message10[] = "1 Teaspoon";
+char message11[] = "Vanilla Extract";
+char message12[] = "2 Large Eggs";
+char message13[] = " ";
+char message14[] = "1/4 Teaspoon";
+char message15[] = "Kosher Salt";
+char message16[] = "3/4 Cup All-";
+char message17[] = "Purpose Flour";
+char message18[] = "Bake for 10";
+char message19[] = "minutes";
+const uint8_t msgArrSize = 20;
+char* msgArr[msgArrSize] = {message0, message1, message2, message3, message4,
+     message5, message6, message7, message8, message9, message10, message11, message12,
+     message13, message14, message15, message16, message17, message18, message19};
 
 // INDEX VARIABLES
 uint8_t index = 0; // HOLDS INDEX FOR MESSAGE
@@ -327,7 +338,7 @@ void loop()
 void scroll_up()
 {
      // DECREMENT INDEX BY ONE
-     --index;
+     index -= 2;
 
      // CHECK THE BOUNDS OF INDEX (REMEMBER index IS UNSIGNED)
      if(index > (msgArrSize - 2))
@@ -355,7 +366,7 @@ void scroll_up()
 void scroll_down()
 {
      // INCREMENT INDEX
-     ++index;
+     index += 2;
 
      // CHECK THE BOUNDS OF INDEX
      if(index > (msgArrSize - 2))
