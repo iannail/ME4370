@@ -1,0 +1,20 @@
+﻿\section{Executive Summary}
+In this lab, the objective is to output a recipe to a Liquid Crystal Display (LCD) and include a seven segment display as a timer.
+The minimum objectives were:
+\begin{enumerate}
+\item Tell the user what recipe is to follow.
+\item Provide the recipe steps in order, timed.
+\item Provide a countdown timer for any timed events in the recipe.
+\item Display all instructions on the LCD screen
+\item Display countdown time on one or more 7-segment displays
+\item Test your product on someone outside the class, record their use of your product.
+\end{enumerate}
+
+For objective 1, 2, and 4. the recipe is displayed on the LCD one item at a time. The next recipe item is displayed with the push button. 
+For objective 3 and 5 the timed portion the timer will start and stop with a push button. The 4 digit seven segment display is used for the timer. The first two digits are the minutes, and the second two digits are the seconds.
+
+An I2C module was used for the LCD to cut down on wires and ports needed from the Arduino Mega. The library LiquidCrystal\_I2C.h was utilized. Communication happens over 4 wires. Power, ground, and 2 communication lines.
+
+On wiring the seven segment that has 4 displays. 12 GPIO pins are required from the Arduino. 8 are required for the segments (7 segments + 1 for the decimal point). The other 4 GPIO pins select which display to turn on. Only one display should be on at a time (unless you want the same digit to be written to other displays). This means that we have to continuously write to each display faster than we can visually see. This gives the appearance that each display is being on all at ounce. To use the GPIO pins, the registers were written to directly. PORTB GPIO pins were used. This happen is lines 92 to 94 in the C code.
+
+AutoCad was used to draw up the circuit diagram of all the connections, components, and devices used.

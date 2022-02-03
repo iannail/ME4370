@@ -1,0 +1,4 @@
+\newcommand\Lab{Lab02} 			% Change lab number to current lab
+\title{Lab 02 \\\textbf{LCD and Seven Segment Display}}	% Change Lab title and subtitle
+\author{Logan Barber, Ian Nail}
+\date{\today}
