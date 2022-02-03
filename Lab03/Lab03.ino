@@ -1,7 +1,7 @@
-// AUTHORS: A. LOGAN BARBER; IAN NAIL
-// FILE NAME: Lab02.ino
-// LAST UPDATED: 28 JANUARY 2022
-/*
+/* AUTHORS: A. LOGAN BARBER; IAN NAIL
+ * FILE NAME: Lab02.ino
+ * LAST UPDATED: 28 JANUARY 2022
+ *
  *  PURPOSE: THIS FILE IS THE MAIN FILE FOR DISPLAYING A RECIPE ON AN LCD AND BEING ABLE TO SCROLL USING TWO BUTTONS.
  *       THIS FILE ALSO UTILIZES AND 4-7 SEGMENT DISPLAY AS A 10 MINUTE TIMER.
  */ 
@@ -105,8 +105,8 @@
 
 // DEFINE PIN NUMBERS
 #define ADDRESS 0x27
-#define COLS 16
-#define ROWS 2
+#define 7segCOLS 16
+#define 7segROWS 2
 
 // TIMER PARAMTERS
 uint8_t buttonState = 0;
@@ -183,7 +183,7 @@ uint8_t i = 0; // HOLDS INDEX IN for LOOPS FOR SCROLLING
 uint8_t t = 0; // HOLDS INDEX IN for LOOP FOR THE TIMER
 
 // CREATE LiquidCrystal OBJECT
-LiquidCrystal_I2C lcd(ADDRESS, COLS, ROWS);
+LiquidCrystal_I2C lcd(ADDRESS, 7segCOLS, 7segROWS);
 
 // RUN THIS PROGRAM
 void setup()
@@ -301,26 +301,26 @@ void loop()
           {
                case 0:
                     PORTA = arrD[t];
-                    pickNumber(minutesTens);
+                    7seg_writeNumber(minutesTens);
                     delayMicroseconds(500);
                     break;
      
                 case 1:
                      PORTA = arrD[t];
-                     pickNumber(minutesOnes);
+                     7seg_writeNumber(minutesOnes);
                      PORTB |= 0x80;
                      delayMicroseconds(500);
                      break;
      
                  case 2:
                       PORTA = arrD[t];
-                      pickNumber(secondsTens);
+                      7seg_writeNumber(secondsTens);
                       delayMicroseconds(500);
                       break;
      
                  case 3:
                       PORTA = arrD[t];
-                      pickNumber(secondsOnes);
+                      7seg_writeNumber(secondsOnes);
                       delayMicroseconds(500);
                       break;
           }
@@ -385,13 +385,13 @@ void scroll_down()
 
 /*
  * TYPE: FUNCTION
- * NAME: pickNumber
+ * NAME: 7seg_writeNumber
  * RETURN: void
  * NUMBER OF PARAMETERS: 1
  * PARAMETER NAMES: int x
  * PURPOSE: THIS FUNCTION PICK THE NUMBER FOR THE LCD
  */
-void pickNumber(int x) //changes value of number
+void 7seg_writeNumber(int x) //changes value of number
 {
      switch(x)
      {
