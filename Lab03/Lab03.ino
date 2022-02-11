@@ -141,7 +141,6 @@ float totalSeconds = minutes*60 + seconds;
 float totalMilliseconds = totalSeconds*1000;
 float totalMicroseconds = totalMilliseconds*1000;
 
-<<<<<<< HEAD
 // DEFINE NUMBERS FOR 7 SEGMENT DISPLAY
 #define ZERO 0x00
 #define ONE 0x01
@@ -171,7 +170,7 @@ float totalMicroseconds = totalMilliseconds*1000;
 #define ZERO_PAD 0xEB // 0b11101011
 #define POUND_PAD 0xED // 0b11101101
 #define D_PAD 0xEE // 0b11101110
-=======
+
 // Keypad Parameters
 const byte ROWS = 4; // number of rows on keypad
 const byte COLS = 4; // number of columns on keypad
@@ -179,32 +178,22 @@ char keys[ROWS][COLS] = { // The buttons on the keypad
 {'1','2','3', 'A'},
 {'4','5','6', 'B'},
 {'7','8','9', 'C'},
-{'*','0','#', 'D'}
-};
+{'*','0','#', 'D'}};
+
 char keyResult = 'F';
 int password = '0';
+
 // DEFINE LETTERS FOR 7 SEGMENT DISPLAY
-const uint8_t ZERO = 0x3F;
-const uint8_t ZERO_DEV = 0xBF;
-const uint8_t ONE = 0x06;
-const uint8_t ONE_DEC = 0x86;
-const uint8_t TWO = 0x5B;
-const uint8_t TWO_DEC = 0xDB;
-const uint8_t THREE = 0x4F;
-const uint8_t THREE_DEC = 0xCF;
-const uint8_t FOUR = 0x66;
-const uint8_t FOUR_DEC = 0xE6;
-const uint8_t FIVE = 0x6D;
-const uint8_t FIVE_DEC = 0xED;
-const uint8_t SIX = 0x7D;
-const uint8_t SIX_DEC = 0xFD;
-const uint8_t SEVEN = 0x07;
-const uint8_t SEVEND_DEC = 0x87;
-const uint8_t EIGHT = 0x7F;
-const uint8_t EIGHT_DEC = 0xFF;
-const uint8_t NINE = 0x67;
-const uint8_t NINE_DEC = 0xE7;
->>>>>>> dc408f77e0ce327f8bb5e17f7da11c460e63e10f
+#define ZERO 0x00
+#define ONE 0x01
+#define TWO 0x02
+#define THREE 0x03
+#define FOUR 0x04
+#define FIVE 0x05
+#define SIX 0x06
+#define SEVEN 0x07
+#define EIGHT 0x08
+#define NINE 0x08
 
 // DEFINE THE DISPLAY SELECTION NUMBERS
 const uint8_t D1 = 0x0F; // 0b00001111
@@ -214,7 +203,7 @@ const uint8_t D4 = 0x3F; // 0b00111111
 const uint8_t arrD[4] = {D1, D2, D3, D4};
 
 // MESSAGE TO PRINT
-char password[] = "Enter Password to continue"
+char password0[] = "Enter Password: ";
 char message0[] = "Double Chocolate";
 char message1[] = "Flower Brownies";
 char message2[] = "1/2 Cup";
@@ -235,8 +224,8 @@ char message16[] = "3/4 Cup All-";
 char message17[] = "Purpose Flour";
 char message18[] = "Bake for 10";
 char message19[] = "minutes";
-const uint8_t msgArrSize = 21;
-char* msgArr[msgArrSize] = {password, message0, message1, message2, message3, message4,
+const uint8_t msgArrSize = 20;
+char* msgArr[msgArrSize] = {message0, message1, message2, message3, message4,
      message5, message6, message7, message8, message9, message10, message11, message12,
      message13, message14, message15, message16, message17, message18, message19};
 
@@ -253,11 +242,6 @@ void setup()
 {
      // INITIALIZE THE LCD SCREEN
      lcd.begin();
-
-     // PRINT MESSAGE
-     lcd.print(msgArr[0]);
-     lcd.setCursor(0, 1);
-     lcd.print(msgArr[1]);
      
      // SETUP BUTTON PINS AS INPUTS
      DDRA = 0x00; // 0b00000000
@@ -280,46 +264,37 @@ void setup()
      secondsTemp = int(totalSeconds)%60;
      secondsTens = secondsTemp/10;
      secondsOnes = secondsTemp%10;
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-     // Initialize PORTC for keypad
-      DDRC =  0b00001111;
-      PORTC = 0b11111111;
-<<<<<<< HEAD
-      
-=======
->>>>>>> 7ec69df7481a4c3090d629237903c82af18fcc0e
->>>>>>> 829e36cb12b4a39eaad0339c413ae5e774e9036f
->>>>>>> dc408f77e0ce327f8bb5e17f7da11c460e63e10f
+
+     // PROMPT USER FOR PASSWORD
+     lcd.print(password0);
+     lcd.setCursor(0, 1);
+     
+     // GET USER PASSWORD
+     do 
+     {
+        keyReturn();
+        if (keyResult != 'F')
+        {
+            password = password + keyResult;
+            lcd.print(keyResult);
+            keyResult = 'F'; 
+        }
+     } while(password != '0' + 'A' + 'B' + 'C' + 'D'); 
+
+     // PRINT MESSAGE
+     lcd.clear();
+     lcd.print(msgArr[0]);
+     lcd.setCursor(0, 1);
+     lcd.print(msgArr[1]);
 }
 
 // LOOP FOREVER
 void loop()
-<<<<<<< HEAD
 {
      // IF BUTTON0 IS LOW SCROLL DOWN
      if((PINA & 0x07) == 0x06)
-=======
-{    
-     //Call keyReturn to get the keypad password
-      do {
-   statement(s);
-        keyReturn();
-         if (keyResult != 'F')
-         {
-              password = password + keyResult;
-              lcd.print(keyResult);
-              keyResult = 'F'; 
-         }
-          } while(password != "0" + "A" + "B" + "C" + "D");   
-     
-     // ELSE IF BUTTON0 IS LOW SCROLL DOWN
-     if((PINA & 0xE0) == 0xC0)
->>>>>>> dc408f77e0ce327f8bb5e17f7da11c460e63e10f
      {
-          // DEBOUNCE BUTTON2
+          // DEBOUNCE BUTTON0
           delay(100);
           if((PINA & 0x07) == 0x06)
           {
@@ -327,10 +302,10 @@ void loop()
           }
      }
      
-     // IF BUTTON1 IS LOW THEN SCROLL UP
-     else if((PINA & 0x07) == 0x05)
+     // ELSE IF BUTTON1 IS LOW SCROLL DOWN
+     if((PINA & 0x07) == 0x05)
      {
-          // DEBOUNCE THE BUTTON1
+          // DEBOUNCE BUTTON2
           delay(100);
           if((PINA & 0x07) == 0x05)
           {
@@ -550,9 +525,6 @@ void seven_seg_writeNumber(int x) //changes value of number
                break;
      }
 }
-<<<<<<< HEAD
- 
-=======
 
 /*
  * TYPE: FUNCTION
@@ -564,33 +536,34 @@ void seven_seg_writeNumber(int x) //changes value of number
  */
 char keyReturn(void)
 {
-  /* for loop execution */
-  byte outputROWS[ROWS] = {0b00000001,0b00000010,0b00000100,0b00001000}; // last 4 bits of PORTC that will be toggled to check if a button is pressed
-  byte inputCOLS[COLS] = {0b00010000,0b00100000,0b01000000,0b10000000}; // first 4 bits of PORTC that will be be read from PINC to see if the pullup resistor has been grounded 
-  byte a = 0;
-  byte b = 0;
-  int val = 0;
-  
-  for (a = 0; a < 4; a = a+1) //first for loop to check the rows of the button matrix
-  {
-    PORTC ^=  outputROWS[a]; // toggle the bit low
-  
-    for (b = 0; b < 4; b = b+1) //second for loop to check the columns of the button matrix
+    /* for loop execution */
+    byte outputROWS[ROWS] = {0b00000001,0b00000010,0b00000100,0b00001000}; // last 4 bits of PORTC that will be toggled to check if a button is pressed
+    byte inputCOLS[COLS] = {0b00010000,0b00100000,0b01000000,0b10000000}; // first 4 bits of PORTC that will be be read from PINC to see if the pullup resistor has been grounded 
+    byte a = 0;
+    byte b = 0;
+    int val = 0;
+    
+    for (a = 0; a < 4; a = a+1) //first for loop to check the rows of the button matrix
     {
-      val = (PINC & inputCOLS[b]) >> (b+4); // get value to check if the bit is low (low means a button has been pressed at row a and colomn b
-
-      if (val != 1) //Debouncing code
-      {
-        delay(15); //Debouncing code
-        keyResult = keys[a][b];
-          while(1 != (PINC & inputCOLS[b]) >> (b+4));
-          {
-          val = (PINC & inputCOLS[b]) >> (b+4);
-          } 
-       }
-     }
-     PORTC ^= outputROWS[a]; //toggle the bit high
-    } 
-  return keyResult;
-  }
->>>>>>> dc408f77e0ce327f8bb5e17f7da11c460e63e10f
+        PORTC ^=  outputROWS[a]; // toggle the bit low
+        
+        for (b = 0; b < 4; b = b+1) //second for loop to check the columns of the button matrix
+        {
+            val = (PINC & inputCOLS[b]) >> (b+4); // get value to check if the bit is low (low means a button has been pressed at row a and colomn b
+            
+            if (val != 1) //Debouncing code
+            {
+                delay(15); //Debouncing code
+                keyResult = keys[a][b];
+                while(1 != (PINC & inputCOLS[b]) >> (b+4));
+                {
+                    val = (PINC & inputCOLS[b]) >> (b+4);
+                } 
+            }
+        }
+        
+        PORTC ^= outputROWS[a]; //toggle the bit high
+    }
+    
+    return keyResult;
+}
