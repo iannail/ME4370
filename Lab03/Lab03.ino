@@ -126,7 +126,6 @@
 #define LCDCOLS 16
 #define LCDROWS 2
 
-
 // TIMER PARAMTERS
 uint8_t buttonState = 0;
 uint8_t minutes = 10; //start time -> CAN CHANGE TO WHATEVER TIME YOU WANT
@@ -244,16 +243,6 @@ void setup()
      secondsTemp = int(totalSeconds)%60;
      secondsTens = secondsTemp/10;
      secondsOnes = secondsTemp%10;
-
-     // ASK USER FOR PASSWORD
-     do
-     {
-         for(int i = 0; i < 4; ++i)
-         {
-               
-         }
-     }
-     while(1)
 }
 
 // LOOP FOREVER
