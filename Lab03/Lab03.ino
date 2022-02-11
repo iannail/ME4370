@@ -121,6 +121,7 @@ uint8_t secondsTemp = 0;
 float totalSeconds = minutes*60 + seconds;
 float totalMilliseconds = totalSeconds*1000;
 float totalMicroseconds = totalMilliseconds*1000;
+
 // Keypad Parameters
 const byte ROWS = 4; // number of rows on keypad
 const byte COLS = 4; // number of columns on keypad
@@ -131,7 +132,7 @@ char keys[ROWS][COLS] = { // The buttons on the keypad
 {'*','0','#', 'D'}
 };
 char keyResult = 'F';
-
+int password = '0';
 // DEFINE LETTERS FOR 7 SEGMENT DISPLAY
 const uint8_t ZERO = 0x3F;
 const uint8_t ZERO_DEV = 0xBF;
@@ -162,6 +163,7 @@ const uint8_t D4 = 0xEE; // 0b11101110
 const uint8_t arrD[4] = {D4, D3, D2, D1};
 
 // MESSAGE TO PRINT
+char password[] = "Enter Password to continue"
 char message0[] = "Double Chocolate";
 char message1[] = "Flower Brownies";
 char message2[] = "1/2 Cup";
@@ -182,8 +184,8 @@ char message16[] = "3/4 Cup All-";
 char message17[] = "Purpose Flour";
 char message18[] = "Bake for 10";
 char message19[] = "minutes";
-const uint8_t msgArrSize = 20;
-char* msgArr[msgArrSize] = {message0, message1, message2, message3, message4,
+const uint8_t msgArrSize = 21;
+char* msgArr[msgArrSize] = {password, message0, message1, message2, message3, message4,
      message5, message6, message7, message8, message9, message10, message11, message12,
      message13, message14, message15, message16, message17, message18, message19};
 
@@ -227,17 +229,24 @@ void setup()
      // Initialize PORTC for keypad
       DDRC =  0b00001111;
       PORTC = 0b11111111;
+      
 }
 
 // LOOP FOREVER
 void loop()
-{
-      keyReturn();
-     if (keyResult != 'F')
-     {
-          Serial.println(keyResult);
-          keyResult = 'F'; 
-     }
+{    
+     //Call keyReturn to get the keypad password
+      do {
+   statement(s);
+        keyReturn();
+         if (keyResult != 'F')
+         {
+              password = password + keyResult;
+              lcd.print(keyResult);
+              keyResult = 'F'; 
+         }
+          } while(password != "0" + "A" + "B" + "C" + "D");   
+     
      // ELSE IF BUTTON0 IS LOW SCROLL DOWN
      if((PINA & 0xE0) == 0xC0)
      {
@@ -481,10 +490,8 @@ char keyReturn(void)
           val = (PINC & inputCOLS[b]) >> (b+4);
           } 
        }
-      
      }
      PORTC ^= outputROWS[a]; //toggle the bit high
-    }
-    
+    } 
   return keyResult;
   }
