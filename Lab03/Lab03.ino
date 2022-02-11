@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-// AUTHORS: A. LOGAN BARBER; IAN NAIL
-// FILE NAME: Lab00.ino
-// LAST UPDATED: 28 JANUARY 2022
-/*
-=======
 /* AUTHORS: A. LOGAN BARBER; IAN NAIL
- * FILE NAME: Lab02.ino
+ * FILE NAME: Lab03.ino
  * LAST UPDATED: 28 JANUARY 2022
  *
->>>>>>> 5da86346cde20c8206c9806789d4d837ca1127a0
  *  PURPOSE: THIS FILE IS THE MAIN FILE FOR DISPLAYING A RECIPE ON AN LCD AND BEING ABLE TO SCROLL USING TWO BUTTONS.
  *       THIS FILE ALSO UTILIZES AND 4-7 SEGMENT DISPLAY AS A 10 MINUTE TIMER.
  */ 
@@ -16,96 +9,70 @@
 /*
  * BUTTON0:
  * 
- * DIGITAL PIN: 27
+ * DIGITAL PIN: 22
  * 
  * PORT: A
  * 
- * PORT PIN: 5
+ * PORT PIN: 0
  */
 
  /*
  * BUTTON1:
  * 
- * DIGITAL PIN: 28
+ * DIGITAL PIN: 23
  * 
  * PORT: A
  * 
- * PORT PIN: 6
+ * PORT PIN: 1
  */
 
  /*
  * BUTTON2:
  * 
- * DIGITAL PIN: 29
+ * DIGITAL PIN: 24
  * 
  * PORT: A
  * 
- * PORT PIN: 7
+ * PORT PIN: 2
  */
 
  /*
-  * LCD 4-7 SEGMENT DISPLAY
+  * 7 - SEGMENT DECODER
   * 
-  * PIN 1: 
-  *      DIGITAL PIN: 10
-  *      PORT: B
-  *      PORT PIN: 4
-  *      
-  * PIN 2:
-  *      DIGITAL PIN: 50
-  *      PORT: B
-  *      PORT PIN: 3
-  *      
-  * PIN 3:
-  *      DIGITAL PIN: 13
-  *      PORT: B
-  *      PORT PIN: 7
-  *      
-  * PIN 4: 
-  *      DIGITAL PIN: 51
-  *      PORT: B
-  *      PORT PIN: 2
-  *      
-  * PIN 5:
-  *      DIGITAL PIN: 12
-  *      PORT: B
-  *      PORT PIN: 6
-  *      
-  * PIN 6:
-  *      DIGITAL PIN: 22
-  *      PORT: A
-  *      PORT PIN: 0
-  *      
-  * PIN 7:
-  *      DIGITAL PIN: 52
-  *      PORT: B
-  *      PORT PIN: 1
-  *      
-  * PIN 8:
-  *      DIGITAL PIN: 23
-  *      PORT: A
-  *      PORT PIN: 1
-  *      
-  * PIN 9:
-  *      DIGITAL PIN: 24
-  *      PORT: A
-  *      PORT PIN: 2
-  *      
-  * PIN 10:
-  *      DIGITAL PIN: 11
-  *      PORT: B
-  *      PORT PIN: 5
-  *      
-  * PIN 11:
+  * D0: 
   *      DIGITAL PIN: 53
   *      PORT: B
   *      PORT PIN: 0
   *      
-  * PIN 12:
-  *      DIGITAL PIN: 25
-  *      PORT: A
+  * D1:
+  *      DIGITAL PIN: 52
+  *      PORT: B
+  *      PORT PIN: 1
+  *      
+  * D2:
+  *      DIGITAL PIN: 51
+  *      PORT: B
+  *      PORT PIN: 2
+  *      
+  * D3: 
+  *      DIGITAL PIN: 50
+  *      PORT: B
   *      PORT PIN: 3
   */
+
+  /*
+   * DEMULTIPLEXER
+   * 
+   * A:
+   *      DIGITAL PIN: 10
+   *      PORT: B
+   *      PORT PIN: 4
+   *      
+   * B:
+   *      DIGITAL PIN: 11
+   *      PORT: B
+   *      PORT PIN: 5
+   */
 
   /*
    * KEY PAD:
@@ -154,10 +121,11 @@
 // INCLUDE LIBRARIES
 #include <LiquidCrystal_I2C.h>
 
-// DEFINE PIN NUMBERS
+// DEFINE MACROS FOR LCD SERIAL
 #define ADDRESS 0x27
-#define 7segCOLS 16
-#define 7segROWS 2
+#define LCDCOLS 16
+#define LCDROWS 2
+
 
 // TIMER PARAMTERS
 uint8_t buttonState = 0;
@@ -173,34 +141,42 @@ float totalSeconds = minutes*60 + seconds;
 float totalMilliseconds = totalSeconds*1000;
 float totalMicroseconds = totalMilliseconds*1000;
 
-// DEFINE LETTERS FOR 7 SEGMENT DISPLAY
-const uint8_t ZERO = 0x3F;
-const uint8_t ZERO_DEV = 0xBF;
-const uint8_t ONE = 0x06;
-const uint8_t ONE_DEC = 0x86;
-const uint8_t TWO = 0x5B;
-const uint8_t TWO_DEC = 0xDB;
-const uint8_t THREE = 0x4F;
-const uint8_t THREE_DEC = 0xCF;
-const uint8_t FOUR = 0x66;
-const uint8_t FOUR_DEC = 0xE6;
-const uint8_t FIVE = 0x6D;
-const uint8_t FIVE_DEC = 0xED;
-const uint8_t SIX = 0x7D;
-const uint8_t SIX_DEC = 0xFD;
-const uint8_t SEVEN = 0x07;
-const uint8_t SEVEND_DEC = 0x87;
-const uint8_t EIGHT = 0x7F;
-const uint8_t EIGHT_DEC = 0xFF;
-const uint8_t NINE = 0x67;
-const uint8_t NINE_DEC = 0xE7;
+// DEFINE NUMBERS FOR 7 SEGMENT DISPLAY
+#define ZERO 0x00
+#define ONE 0x01
+#define TWO 0x02
+#define THREE 0x03
+#define FOUR 0x04
+#define FIVE 0x05
+#define SIX 0x06
+#define SEVEN 0x07
+#define EIGHT 0x08
+#define NINE 0x09
+
+// DEFINE KEYPAD ITEMS
+#define ONE_PAD 0x77 // 0b01110111
+#define TWO_PAD 0x7B // 0b01111011
+#define THREE_PAD 0x7D // 0b01111101
+#define A_PAD 0x7E // 0b01111110
+#define FOUR_PAD 0xB7 // 0b10110111
+#define FIVE_PAD 0xBB // 0b10111011
+#define SIX_PAD 0xBD // 0b10111101
+#define B_PAD 0xBE // 0b10111110
+#define SEVEN_PAD 0xD7 // 0b11010111
+#define EIGHT_PAD 0xDB // 0b11011011
+#define NINE_PAD 0xDD //0b11011101
+#define C_PAD 0xDE // 0b11011110
+#define STAR_PAD 0xE7 // 0b11100111
+#define ZERO_PAD 0xEB // 0b11101011
+#define POUND_PAD 0xED // 0b11101101
+#define D_PAD 0xEE // 0b11101110
 
 // DEFINE THE DISPLAY SELECTION NUMBERS
-const uint8_t D1 = 0xE7; // 0b11100111
-const uint8_t D2 = 0xEB; // 0b11101011
-const uint8_t D3 = 0xED; // 0b11101101
-const uint8_t D4 = 0xEE; // 0b11101110
-const uint8_t arrD[4] = {D4, D3, D2, D1};
+const uint8_t D1 = 0x0F; // 0b00001111
+const uint8_t D2 = 0x1F; // 0b00011111
+const uint8_t D3 = 0x2F; // 0b00101111
+const uint8_t D4 = 0x3F; // 0b00111111
+const uint8_t arrD[4] = {D1, D2, D3, D4};
 
 // MESSAGE TO PRINT
 char message0[] = "Double Chocolate";
@@ -234,7 +210,7 @@ uint8_t i = 0; // HOLDS INDEX IN for LOOPS FOR SCROLLING
 uint8_t t = 0; // HOLDS INDEX IN for LOOP FOR THE TIMER
 
 // CREATE LiquidCrystal OBJECT
-LiquidCrystal_I2C lcd(ADDRESS, 7segCOLS, 7segROWS);
+LiquidCrystal_I2C lcd(ADDRESS, LCDCOLS, LCDROWS);
 
 // RUN THIS PROGRAM
 void setup()
@@ -248,19 +224,18 @@ void setup()
      lcd.print(msgArr[1]);
      
      // SETUP BUTTON PINS AS INPUTS
-     // SETUP 7-SEGMENT SELECTOR PINS AS OUTPUT
-     DDRA = 0x0F; // 0b00001111
+     DDRA = 0x00; // 0b00000000
 
      // ENABLE INTERNAL PULL-UP RESISTOR FOR BUTTONS
-     PORTA = 0xE0; // 0b11100000
+     PORTA = 0x07; // 0b00000111
 
      // SETUP PORT B AS OUTPUT FOR THE LCD
-     DDRB = 0xFF;
+     DDRB = 0x7F; // 0b01111111
      PORTB = 0x00;
 
      // SET UP PORT C AS OUTPUT AND INPUT
-     DDRC = 0xF0;
-     PORTC = 0x00;
+     DDRC = 0x0F;
+     PORTC = 0xFF; // ENABLE PULL UP RESISTOR FOR INPUTS ON PORTC
 
      // CALCULATE INDIVIDUAL DIGITS
      totalMinutes = totalSeconds/60;
@@ -269,38 +244,48 @@ void setup()
      secondsTemp = int(totalSeconds)%60;
      secondsTens = secondsTemp/10;
      secondsOnes = secondsTemp%10;
+
+     // ASK USER FOR PASSWORD
+     do
+     {
+         for(int i = 0; i < 4; ++i)
+         {
+               
+         }
+     }
+     while(1)
 }
 
 // LOOP FOREVER
 void loop()
 {
-     // ELSE IF BUTTON0 IS LOW SCROLL DOWN
-     if((PINA & 0xE0) == 0xC0)
+     // IF BUTTON0 IS LOW SCROLL DOWN
+     if((PINA & 0x07) == 0x06)
      {
           // DEBOUNCE BUTTON2
           delay(100);
-          if((PINA & 0xE0) == 0xC0)
+          if((PINA & 0x07) == 0x06)
           {
             scroll_down();
           }
      }
      
      // IF BUTTON1 IS LOW THEN SCROLL UP
-     else if((PINA & 0xE0) == 0xA0)
+     else if((PINA & 0x07) == 0x05)
      {
           // DEBOUNCE THE BUTTON1
           delay(100);
-          if((PINA & 0xE0) == 0xA0)
+          if((PINA & 0x07) == 0x05)
           {
             scroll_up();
           }
      }
      
      // IF BUTTON 2 IS LOW CHANGE THE BUTTON STATE
-     else if((PINA & 0xE0) == 0x60)
+     else if((PINA & 0x07) == 0x03)
      {
           delay(100);
-          if((PINA & 0xE0) == 0x60)
+          if((PINA & 0x07) == 0x03)
           {
              switch(buttonState)
              {
@@ -355,28 +340,35 @@ void loop()
           switch(t)
           {
                case 0:
-                    PORTA = arrD[t];
-                    7seg_writeNumber(minutesTens);
+                    PORTB &= 0x0F;
+                    PORTB |= arrD[t];
+                    seven_seg_writeNumber(minutesTens);
                     delayMicroseconds(500);
                     break;
      
                 case 1:
-                     PORTA = arrD[t];
-                     7seg_writeNumber(minutesOnes);
-                     PORTB |= 0x80;
+                     PORTB &= 0x0F;
+                     PORTB |= arrD[t];
+                     seven_seg_writeNumber(minutesOnes);
+                     PORTB |= 0x40;
                      delayMicroseconds(500);
                      break;
      
                  case 2:
-                      PORTA = arrD[t];
-                      7seg_writeNumber(secondsTens);
+                      PORTB &= 0x0F;
+                      PORTB |= arrD[t];
+                      seven_seg_writeNumber(secondsTens);
                       delayMicroseconds(500);
                       break;
      
                  case 3:
-                      PORTA = arrD[t];
-                      7seg_writeNumber(secondsOnes);
+                      PORTB &= 0x0F;
+                      PORTB |= arrD[t];
+                      seven_seg_writeNumber(secondsOnes);
                       delayMicroseconds(500);
+                      break;
+
+                 default:
                       break;
           }
      }
@@ -440,54 +432,65 @@ void scroll_down()
 
 /*
  * TYPE: FUNCTION
- * NAME: 7seg_writeNumber
+ * NAME: seven_seg_writeNumber
  * RETURN: void
  * NUMBER OF PARAMETERS: 1
  * PARAMETER NAMES: int x
- * PURPOSE: THIS FUNCTION PICK THE NUMBER FOR THE LCD
+ * PURPOSE: THIS FUNCTION PICKS THE NUMBER FOR THE LCD
  */
-void 7seg_writeNumber(int x) //changes value of number
+void seven_seg_writeNumber(int x) //changes value of number
 {
      switch(x)
      {
           case 1: 
-               PORTB = ONE; 
+               PORTB &= 0b00110000;
+               PORTB |= ONE; 
                break;
           
-          case 2: 
-               PORTB = TWO; 
+          case 2:
+               PORTB &= 0b00110000; 
+               PORTB |= TWO; 
                break;
           
           case 3: 
-               PORTB = THREE; 
+               PORTB &= 0b00110000;
+               PORTB |= THREE; 
                break;
           
           case 4: 
-               PORTB = FOUR; 
+               PORTB &= 0b00110000;
+               PORTB |= FOUR; 
                break;
           
           case 5: 
-               PORTB = FIVE; 
+               PORTB &= 0b00110000;
+               PORTB |= FIVE; 
                break;
           
           case 6: 
-               PORTB = SIX; 
+               PORTB &= 0b00110000;
+               PORTB |= SIX; 
                break;
           
           case 7: 
-               PORTB = SEVEN; 
+               PORTB &= 0b00110000;
+               PORTB |= SEVEN; 
                break;
           
           case 8: 
-               PORTB = EIGHT; 
+               PORTB &= 0b00110000;
+               PORTB |= EIGHT; 
                break;
           
           case 9: 
-               PORTB = NINE; 
+               PORTB &= 0b00110000;
+               PORTB |= NINE; 
                break;
 
           default: 
-               PORTB = ZERO; 
+               PORTB &= 0b00110000;
+               PORTB |= ZERO; 
                break;
      }
 }
+ 
