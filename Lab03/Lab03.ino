@@ -105,8 +105,13 @@
 
 // DEFINE PIN NUMBERS
 #define ADDRESS 0x27
+<<<<<<< HEAD
+#define LCDCOLS 16
+#define LCDROWS 2
+=======
 #define 7segCOLS 16
 #define 7segROWS 2
+>>>>>>> 7ec69df7481a4c3090d629237903c82af18fcc0e
 
 // TIMER PARAMTERS
 uint8_t buttonState = 0;
@@ -226,10 +231,16 @@ void setup()
      secondsTemp = int(totalSeconds)%60;
      secondsTens = secondsTemp/10;
      secondsOnes = secondsTemp%10;
+<<<<<<< HEAD
+=======
      // Initialize PORTC for keypad
       DDRC =  0b00001111;
       PORTC = 0b11111111;
+<<<<<<< HEAD
       
+=======
+>>>>>>> 7ec69df7481a4c3090d629237903c82af18fcc0e
+>>>>>>> 829e36cb12b4a39eaad0339c413ae5e774e9036f
 }
 
 // LOOP FOREVER
