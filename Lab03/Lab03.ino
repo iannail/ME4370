@@ -1,5 +1,5 @@
 /* AUTHORS: A. LOGAN BARBER; IAN NAIL
- * FILE NAME: Lab03.ino
+ * FILE NAME: Lab02.ino
  * LAST UPDATED: 28 JANUARY 2022
  *
  *  PURPOSE: THIS FILE IS THE MAIN FILE FOR DISPLAYING A RECIPE ON AN LCD AND BEING ABLE TO SCROLL USING TWO BUTTONS.
@@ -9,122 +9,109 @@
 /*
  * BUTTON0:
  * 
- * DIGITAL PIN: 22
+ * DIGITAL PIN: 27
  * 
  * PORT: A
  * 
- * PORT PIN: 0
+ * PORT PIN: 5
  */
 
  /*
  * BUTTON1:
  * 
- * DIGITAL PIN: 23
+ * DIGITAL PIN: 28
  * 
  * PORT: A
  * 
- * PORT PIN: 1
+ * PORT PIN: 6
  */
 
  /*
  * BUTTON2:
  * 
- * DIGITAL PIN: 24
+ * DIGITAL PIN: 29
  * 
  * PORT: A
  * 
- * PORT PIN: 2
+ * PORT PIN: 7
  */
 
  /*
-  * 7 - SEGMENT DECODER
+  * LCD 4-7 SEGMENT DISPLAY
   * 
-  * D0: 
-  *      DIGITAL PIN: 53
+  * PIN 1: 
+  *      DIGITAL PIN: 10
   *      PORT: B
-  *      PORT PIN: 0
+  *      PORT PIN: 4
   *      
-  * D1:
-  *      DIGITAL PIN: 52
+  * PIN 2:
+  *      DIGITAL PIN: 50
   *      PORT: B
-  *      PORT PIN: 1
+  *      PORT PIN: 3
   *      
-  * D2:
+  * PIN 3:
+  *      DIGITAL PIN: 13
+  *      PORT: B
+  *      PORT PIN: 7
+  *      
+  * PIN 4: 
   *      DIGITAL PIN: 51
   *      PORT: B
   *      PORT PIN: 2
   *      
-  * D3: 
-  *      DIGITAL PIN: 50
+  * PIN 5:
+  *      DIGITAL PIN: 12
   *      PORT: B
+  *      PORT PIN: 6
+  *      
+  * PIN 6:
+  *      DIGITAL PIN: 22
+  *      PORT: A
+  *      PORT PIN: 0
+  *      
+  * PIN 7:
+  *      DIGITAL PIN: 52
+  *      PORT: B
+  *      PORT PIN: 1
+  *      
+  * PIN 8:
+  *      DIGITAL PIN: 23
+  *      PORT: A
+  *      PORT PIN: 1
+  *      
+  * PIN 9:
+  *      DIGITAL PIN: 24
+  *      PORT: A
+  *      PORT PIN: 2
+  *      
+  * PIN 10:
+  *      DIGITAL PIN: 11
+  *      PORT: B
+  *      PORT PIN: 5
+  *      
+  * PIN 11:
+  *      DIGITAL PIN: 53
+  *      PORT: B
+  *      PORT PIN: 0
+  *      
+  * PIN 12:
+  *      DIGITAL PIN: 25
+  *      PORT: A
   *      PORT PIN: 3
   */
-
-  /*
-   * DEMULTIPLEXER
-   * 
-   * A:
-   *      DIGITAL PIN: 10
-   *      PORT: B
-   *      PORT PIN: 4
-   *      
-   * B:
-   *      DIGITAL PIN: 11
-   *      PORT: B
-   *      PORT PIN: 5
-   */
-
-  /*
-   * KEY PAD:
-   * 
-   * PIN 1: 
-   *      DIGITAL PIN: 37
-   *      PORT: C
-   *      PORT PIN: 0
-   *      
-   * PIN 2:
-   *      DIGITAL PIN: 36
-   *      PORT: C
-   *      PORT PIN: 1
-   *      
-   * PIN 3:
-   *      DIGITAL PIN: 35
-   *      PORT: C
-   *      PORT PIN: 2
-   *      
-   * PIN 4:
-   *      DIGITAL PIN: 34
-   *      PORT: C
-   *      PORT PIN: 3
-   *      
-   * PIN 5:
-   *      DIGITAL PIN: 33
-   *      PORT: C
-   *      PORT PIN: 4
-   *      
-   * PIN 6:
-   *      DIGITAL PIN: 32
-   *      PORT: C
-   *      PORT PIN: 5
-   *      
-   * PIN 7:
-   *      DIGITAL PIN: 31
-   *      PORT: C
-   *      PORT PIN: 6
-   *      
-   * PIN 8:
-   *      DIGITAL PIN: 30
-   *      PORT: C
-   *      PORT PIN: 7
-   */
  
 // INCLUDE LIBRARIES
 #include <LiquidCrystal_I2C.h>
 
-// DEFINE MACROS FOR LCD SERIAL
+// DEFINE PIN NUMBERS
 #define ADDRESS 0x27
+<<<<<<< HEAD
 #define LCDCOLS 16
 #define LCDROWS 2
+=======
+#define 7segCOLS 16
+#define 7segROWS 2
+>>>>>>> 7ec69df7481a4c3090d629237903c82af18fcc0e
 
 // TIMER PARAMTERS
 uint8_t buttonState = 0;
@@ -139,43 +126,45 @@ uint8_t secondsTemp = 0;
 float totalSeconds = minutes*60 + seconds;
 float totalMilliseconds = totalSeconds*1000;
 float totalMicroseconds = totalMilliseconds*1000;
+// Keypad Parameters
+const byte ROWS = 4; // number of rows on keypad
+const byte COLS = 4; // number of columns on keypad
+char keys[ROWS][COLS] = { // The buttons on the keypad
+{'1','2','3', 'A'},
+{'4','5','6', 'B'},
+{'7','8','9', 'C'},
+{'*','0','#', 'D'}
+};
+char keyResult = 'F';
 
-// DEFINE NUMBERS FOR 7 SEGMENT DISPLAY
-#define ZERO 0x00
-#define ONE 0x01
-#define TWO 0x02
-#define THREE 0x03
-#define FOUR 0x04
-#define FIVE 0x05
-#define SIX 0x06
-#define SEVEN 0x07
-#define EIGHT 0x08
-#define NINE 0x09
-
-// DEFINE KEYPAD ITEMS
-#define ONE_PAD 0x77 // 0b01110111
-#define TWO_PAD 0x7B // 0b01111011
-#define THREE_PAD 0x7D // 0b01111101
-#define A_PAD 0x7E // 0b01111110
-#define FOUR_PAD 0xB7 // 0b10110111
-#define FIVE_PAD 0xBB // 0b10111011
-#define SIX_PAD 0xBD // 0b10111101
-#define B_PAD 0xBE // 0b10111110
-#define SEVEN_PAD 0xD7 // 0b11010111
-#define EIGHT_PAD 0xDB // 0b11011011
-#define NINE_PAD 0xDD //0b11011101
-#define C_PAD 0xDE // 0b11011110
-#define STAR_PAD 0xE7 // 0b11100111
-#define ZERO_PAD 0xEB // 0b11101011
-#define POUND_PAD 0xED // 0b11101101
-#define D_PAD 0xEE // 0b11101110
+// DEFINE LETTERS FOR 7 SEGMENT DISPLAY
+const uint8_t ZERO = 0x3F;
+const uint8_t ZERO_DEV = 0xBF;
+const uint8_t ONE = 0x06;
+const uint8_t ONE_DEC = 0x86;
+const uint8_t TWO = 0x5B;
+const uint8_t TWO_DEC = 0xDB;
+const uint8_t THREE = 0x4F;
+const uint8_t THREE_DEC = 0xCF;
+const uint8_t FOUR = 0x66;
+const uint8_t FOUR_DEC = 0xE6;
+const uint8_t FIVE = 0x6D;
+const uint8_t FIVE_DEC = 0xED;
+const uint8_t SIX = 0x7D;
+const uint8_t SIX_DEC = 0xFD;
+const uint8_t SEVEN = 0x07;
+const uint8_t SEVEND_DEC = 0x87;
+const uint8_t EIGHT = 0x7F;
+const uint8_t EIGHT_DEC = 0xFF;
+const uint8_t NINE = 0x67;
+const uint8_t NINE_DEC = 0xE7;
 
 // DEFINE THE DISPLAY SELECTION NUMBERS
-const uint8_t D1 = 0x0F; // 0b00001111
-const uint8_t D2 = 0x1F; // 0b00011111
-const uint8_t D3 = 0x2F; // 0b00101111
-const uint8_t D4 = 0x3F; // 0b00111111
-const uint8_t arrD[4] = {D1, D2, D3, D4};
+const uint8_t D1 = 0xE7; // 0b11100111
+const uint8_t D2 = 0xEB; // 0b11101011
+const uint8_t D3 = 0xED; // 0b11101101
+const uint8_t D4 = 0xEE; // 0b11101110
+const uint8_t arrD[4] = {D4, D3, D2, D1};
 
 // MESSAGE TO PRINT
 char message0[] = "Double Chocolate";
@@ -209,7 +198,7 @@ uint8_t i = 0; // HOLDS INDEX IN for LOOPS FOR SCROLLING
 uint8_t t = 0; // HOLDS INDEX IN for LOOP FOR THE TIMER
 
 // CREATE LiquidCrystal OBJECT
-LiquidCrystal_I2C lcd(ADDRESS, LCDCOLS, LCDROWS);
+LiquidCrystal_I2C lcd(ADDRESS, 7segCOLS, 7segROWS);
 
 // RUN THIS PROGRAM
 void setup()
@@ -223,18 +212,15 @@ void setup()
      lcd.print(msgArr[1]);
      
      // SETUP BUTTON PINS AS INPUTS
-     DDRA = 0x00; // 0b00000000
+     // SETUP 7-SEGMENT SELECTOR PINS AS OUTPUT
+     DDRA = 0x0F; // 0b00001111
 
      // ENABLE INTERNAL PULL-UP RESISTOR FOR BUTTONS
-     PORTA = 0x07; // 0b00000111
+     PORTA = 0xE0; // 0b11100000
 
      // SETUP PORT B AS OUTPUT FOR THE LCD
-     DDRB = 0x7F; // 0b01111111
+     DDRB = 0xFF;
      PORTB = 0x00;
-
-     // SET UP PORT C AS OUTPUT AND INPUT
-     DDRC = 0x0F;
-     PORTC = 0xFF; // ENABLE PULL UP RESISTOR FOR INPUTS ON PORTC
 
      // CALCULATE INDIVIDUAL DIGITS
      totalMinutes = totalSeconds/60;
@@ -243,38 +229,50 @@ void setup()
      secondsTemp = int(totalSeconds)%60;
      secondsTens = secondsTemp/10;
      secondsOnes = secondsTemp%10;
+<<<<<<< HEAD
+=======
+     // Initialize PORTC for keypad
+      DDRC =  0b00001111;
+      PORTC = 0b11111111;
+>>>>>>> 7ec69df7481a4c3090d629237903c82af18fcc0e
 }
 
 // LOOP FOREVER
 void loop()
 {
-     // IF BUTTON0 IS LOW SCROLL DOWN
-     if((PINA & 0x07) == 0x06)
+      keyReturn();
+     if (keyResult != 'F')
+     {
+          Serial.println(keyResult);
+          keyResult = 'F'; 
+     }
+     // ELSE IF BUTTON0 IS LOW SCROLL DOWN
+     if((PINA & 0xE0) == 0xC0)
      {
           // DEBOUNCE BUTTON2
           delay(100);
-          if((PINA & 0x07) == 0x06)
+          if((PINA & 0xE0) == 0xC0)
           {
             scroll_down();
           }
      }
      
      // IF BUTTON1 IS LOW THEN SCROLL UP
-     else if((PINA & 0x07) == 0x05)
+     else if((PINA & 0xE0) == 0xA0)
      {
           // DEBOUNCE THE BUTTON1
           delay(100);
-          if((PINA & 0x07) == 0x05)
+          if((PINA & 0xE0) == 0xA0)
           {
             scroll_up();
           }
      }
      
      // IF BUTTON 2 IS LOW CHANGE THE BUTTON STATE
-     else if((PINA & 0x07) == 0x03)
+     else if((PINA & 0xE0) == 0x60)
      {
           delay(100);
-          if((PINA & 0x07) == 0x03)
+          if((PINA & 0xE0) == 0x60)
           {
              switch(buttonState)
              {
@@ -329,35 +327,28 @@ void loop()
           switch(t)
           {
                case 0:
-                    PORTB &= 0x0F;
-                    PORTB |= arrD[t];
-                    seven_seg_writeNumber(minutesTens);
+                    PORTA = arrD[t];
+                    7seg_writeNumber(minutesTens);
                     delayMicroseconds(500);
                     break;
      
                 case 1:
-                     PORTB &= 0x0F;
-                     PORTB |= arrD[t];
-                     seven_seg_writeNumber(minutesOnes);
-                     PORTB |= 0x40;
+                     PORTA = arrD[t];
+                     7seg_writeNumber(minutesOnes);
+                     PORTB |= 0x80;
                      delayMicroseconds(500);
                      break;
      
                  case 2:
-                      PORTB &= 0x0F;
-                      PORTB |= arrD[t];
-                      seven_seg_writeNumber(secondsTens);
+                      PORTA = arrD[t];
+                      7seg_writeNumber(secondsTens);
                       delayMicroseconds(500);
                       break;
      
                  case 3:
-                      PORTB &= 0x0F;
-                      PORTB |= arrD[t];
-                      seven_seg_writeNumber(secondsOnes);
+                      PORTA = arrD[t];
+                      7seg_writeNumber(secondsOnes);
                       delayMicroseconds(500);
-                      break;
-
-                 default:
                       break;
           }
      }
@@ -421,65 +412,87 @@ void scroll_down()
 
 /*
  * TYPE: FUNCTION
- * NAME: seven_seg_writeNumber
+ * NAME: 7seg_writeNumber
  * RETURN: void
  * NUMBER OF PARAMETERS: 1
  * PARAMETER NAMES: int x
- * PURPOSE: THIS FUNCTION PICKS THE NUMBER FOR THE LCD
+ * PURPOSE: THIS FUNCTION PICK THE NUMBER FOR THE LCD
  */
-void seven_seg_writeNumber(int x) //changes value of number
+void 7seg_writeNumber(int x) //changes value of number
 {
      switch(x)
      {
-          case 1: 
-               PORTB &= 0b00110000;
-               PORTB |= ONE; 
-               break;
-          
-          case 2:
-               PORTB &= 0b00110000; 
-               PORTB |= TWO; 
-               break;
-          
-          case 3: 
-               PORTB &= 0b00110000;
-               PORTB |= THREE; 
-               break;
-          
-          case 4: 
-               PORTB &= 0b00110000;
-               PORTB |= FOUR; 
-               break;
-          
-          case 5: 
-               PORTB &= 0b00110000;
-               PORTB |= FIVE; 
-               break;
-          
-          case 6: 
-               PORTB &= 0b00110000;
-               PORTB |= SIX; 
-               break;
-          
-          case 7: 
-               PORTB &= 0b00110000;
-               PORTB |= SEVEN; 
-               break;
-          
-          case 8: 
-               PORTB &= 0b00110000;
-               PORTB |= EIGHT; 
-               break;
-          
-          case 9: 
-               PORTB &= 0b00110000;
-               PORTB |= NINE; 
-               break;
-
           default: 
-               PORTB &= 0b00110000;
-               PORTB |= ZERO; 
+               PORTB = ZERO; 
+               break;
+          case 1: 
+               PORTB = ONE; 
+               break;
+          case 2: 
+               PORTB = TWO; 
+               break;
+          case 3: 
+               PORTB = THREE; 
+            break;
+          case 4: 
+               PORTB = FOUR; 
+               break;
+          case 5: 
+               PORTB = FIVE; 
+               break;
+          case 6: 
+               PORTB = SIX; 
+               break;
+          case 7: 
+               PORTB = SEVEN; 
+               break;
+          case 8: 
+               PORTB = EIGHT; 
+               break;
+          case 9: 
+               PORTB = NINE; 
                break;
      }
 }
- 
+
+/*
+ * TYPE: FUNCTION
+ * NAME: keyReturn
+ * RETURN: char
+ * NUMBER OF PARAMETERS: 1
+ * PARAMETER NAMES: void
+ * PURPOSE: THIS returns the character value of the button pressed on the keypad
+ */
+char keyReturn(void)
+{
+  /* for loop execution */
+  byte outputROWS[ROWS] = {0b00000001,0b00000010,0b00000100,0b00001000}; // last 4 bits of PORTC that will be toggled to check if a button is pressed
+  byte inputCOLS[COLS] = {0b00010000,0b00100000,0b01000000,0b10000000}; // first 4 bits of PORTC that will be be read from PINC to see if the pullup resistor has been grounded 
+  byte a = 0;
+  byte b = 0;
+  int val = 0;
+  
+  for (a = 0; a < 4; a = a+1) //first for loop to check the rows of the button matrix
+  {
+    PORTC ^=  outputROWS[a]; // toggle the bit low
+  
+    for (b = 0; b < 4; b = b+1) //second for loop to check the columns of the button matrix
+    {
+      val = (PINC & inputCOLS[b]) >> (b+4); // get value to check if the bit is low (low means a button has been pressed at row a and colomn b
+
+      if (val != 1) //Debouncing code
+      {
+        delay(15); //Debouncing code
+        keyResult = keys[a][b];
+          while(1 != (PINC & inputCOLS[b]) >> (b+4));
+          {
+          val = (PINC & inputCOLS[b]) >> (b+4);
+          } 
+       }
+      
+     }
+     PORTC ^= outputROWS[a]; //toggle the bit high
+    }
+    
+  return keyResult;
+  }
