@@ -3,36 +3,27 @@
  * LAST UPDATED: 28 JANUARY 2022
  *
  *  PURPOSE: THIS FILE IS THE MAIN FILE FOR DISPLAYING A RECIPE ON AN LCD AND BEING ABLE TO SCROLL USING TWO BUTTONS.
- *       THIS FILE ALSO UTILIZES AND 4-7 SEGMENT DISPLAY AS A 10 MINUTE TIMER.
+ *       THIS FILE ALSO UTILIZES AND 4-7 SEGMENT DISPLAY AS A 10 MINUTE TIMER AND A KEYPAD FOR PASSWORD PROTECTION
  */ 
 
 /*
  * BUTTON0:
- * 
  * DIGITAL PIN: 22
- * 
  * PORT: A
- * 
  * PORT PIN: 0
  */
 
  /*
  * BUTTON1:
- * 
  * DIGITAL PIN: 23
- * 
  * PORT: A
- * 
  * PORT PIN: 1
  */
 
  /*
  * BUTTON2:
- * 
  * DIGITAL PIN: 24
- * 
  * PORT: A
- * 
  * PORT PIN: 2
  */
 
@@ -120,17 +111,20 @@
  
 // INCLUDE LIBRARIES
 #include <LiquidCrystal_I2C.h>
+#include <stdio.h>
+
+#define TRUE 0x01
+#define FALSE 0x00
 
 // DEFINE MACROS FOR LCD SERIAL
 #define ADDRESS 0x27
 #define LCDCOLS 16
 #define LCDROWS 2
 
-
 // TIMER PARAMTERS
 uint8_t buttonState = 0;
-uint8_t minutes = 10; //start time -> CAN CHANGE TO WHATEVER TIME YOU WANT
-uint8_t seconds = 0;  //start time -> CAN CHANGE TO WHATEVER TIME YOU WANT
+uint8_t minutes = 6; //start time -> CAN CHANGE TO WHATEVER TIME YOU WANT
+uint8_t seconds = 30;  //start time -> CAN CHANGE TO WHATEVER TIME YOU WANT
 uint8_t totalMinutes = 0;
 uint8_t minutesTens = 0;
 uint8_t minutesOnes = 0;
@@ -179,7 +173,7 @@ char keys[ROWS][COLS] = { // The buttons on the keypad
 {'4','5','6', 'B'},
 {'7','8','9', 'C'},
 {'*','0','#', 'D'}};
-
+int passwordSuceed = FALSE;
 char keyResult = 'F';
 int password = '0';
 
@@ -193,7 +187,7 @@ int password = '0';
 #define SIX 0x06
 #define SEVEN 0x07
 #define EIGHT 0x08
-#define NINE 0x08
+#define NINE 0x09
 
 // DEFINE THE DISPLAY SELECTION NUMBERS
 const uint8_t D1 = 0x0F; // 0b00001111
@@ -242,7 +236,6 @@ void setup()
 {
      // INITIALIZE THE LCD SCREEN
      lcd.begin();
-     
      // SETUP BUTTON PINS AS INPUTS
      DDRA = 0x00; // 0b00000000
 
@@ -265,29 +258,9 @@ void setup()
      secondsTens = secondsTemp/10;
      secondsOnes = secondsTemp%10;
 
-     // PROMPT USER FOR PASSWORD
-     lcd.print(password0);
-     lcd.setCursor(0, 1);
-     
-     // GET USER PASSWORD
-     do 
-     {
-        keyReturn();
-        if (keyResult != 'F')
-        {
-            password = password + keyResult;
-            lcd.print(keyResult);
-            keyResult = 'F'; 
-        }
-     } while(password != '0' + 'A' + 'B' + 'C' + 'D'); 
-
-     // PRINT MESSAGE
-     lcd.clear();
-     lcd.print(msgArr[0]);
-     lcd.setCursor(0, 1);
-     lcd.print(msgArr[1]);
+      // This function sets the password and lockes the recipe till the password is entered
+      passwordSetandLock();
 }
-
 // LOOP FOREVER
 void loop()
 {
@@ -428,9 +401,9 @@ void scroll_up()
      for(i = 0; i < 2; ++i)
      {
           lcd.setCursor(0, i);
-          delayMicroseconds(1000);
+          delayMicroseconds(500);
           lcd.print(msgArr[index + i]);
-          delayMicroseconds(1000);
+          delayMicroseconds(500);
      }
 }
 
@@ -541,23 +514,22 @@ char keyReturn(void)
     byte inputCOLS[COLS] = {0b00010000,0b00100000,0b01000000,0b10000000}; // first 4 bits of PORTC that will be be read from PINC to see if the pullup resistor has been grounded 
     byte a = 0;
     byte b = 0;
-    int val = 0;
+    int valuePINC_B = 0;
     
-    for (a = 0; a < 4; a = a+1) //first for loop to check the rows of the button matrix
+    for (a = 0; a < 4; a = a+1) //first 'for' loop to check the rows of the button matrix
     {
         PORTC ^=  outputROWS[a]; // toggle the bit low
         
         for (b = 0; b < 4; b = b+1) //second for loop to check the columns of the button matrix
         {
-            val = (PINC & inputCOLS[b]) >> (b+4); // get value to check if the bit is low (low means a button has been pressed at row a and colomn b
+            valuePINC_B = (PINC & inputCOLS[b]) >> (b+4); // get value to check if the bit is low (low means a button has been pressed at row a and colomn b
             
-            if (val != 1) //Debouncing code
+            if (valuePINC_B != 1) // if the value is not high that means a button press is detected
             {
-                delay(15); //Debouncing code
                 keyResult = keys[a][b];
+                delay(15); //Debouncing code
                 while(1 != (PINC & inputCOLS[b]) >> (b+4));
                 {
-                    val = (PINC & inputCOLS[b]) >> (b+4);
                 } 
             }
         }
@@ -567,3 +539,87 @@ char keyReturn(void)
     
     return keyResult;
 }
+
+/*
+ * TYPE: FUNCTION
+ * NAME: passwordSetandLock
+ * RETURN: void
+ * NUMBER OF PARAMETERS: 0
+ * PARAMETER NAMES: n/a
+ * PURPOSE: THIS SETS AND LOCKES THE RECIPE TILL THE CORRECT PASSWORD IS ENTERED. THREE MAX TRIES TO ENTER CORRECT PASSWORD
+ */
+void passwordSetandLock()
+{
+ // PROMPT USER FOR PASSWORD
+     lcd.print(password0);
+     lcd.setCursor(0, 1);
+     
+     // GET USER PASSWORD
+     do 
+     {
+        keyReturn();
+        passwordSuceed = 0;
+        
+        if (keyResult != 'F')
+        {
+          password = password + keyResult;
+          lcd.print(keyResult);
+            if (keyResult == '#') 
+            {
+              passwordSuceed = TRUE;
+            }
+
+          keyResult = 'F'; 
+        }
+     } while(passwordSuceed == FALSE);
+     
+      lcd.clear();
+      lcd.print("RECIPE LOCKED");
+      lcd.setCursor(0, 1);
+      
+     //GET USER TO ENTER PASSWORD TO UNLOCK RECIPE
+    int passwordTest = '0';
+    int passwordTries = 0;
+     do 
+     {
+        keyReturn();
+        passwordSuceed = 0;
+        
+        
+        if (keyResult != 'F')
+        {
+          passwordTest = passwordTest + keyResult;
+          lcd.print(keyResult);
+            if ((keyResult == '#') && (passwordTest == password)) 
+            {
+              passwordSuceed = TRUE;
+            }
+            if ((keyResult == '#') && (passwordTest != password)) 
+            {
+              passwordSuceed = FALSE;
+              passwordTest = '0';
+              lcd.clear();
+              lcd.print("Try Again");
+              lcd.setCursor(0, 1);
+              passwordTries++;
+                if(passwordTries >= 3)
+                {
+                    lcd.clear();
+                    lcd.print("NO MORE TRIES");
+                    lcd.setCursor(0, 1);
+                    lcd.print("LEFT! ");
+                    while(1)
+                    {
+                    }
+                }
+              }
+          keyResult = 'F'; 
+        }
+     } while(passwordSuceed == FALSE);
+
+     // PRINT MESSAGE
+     lcd.clear();
+     lcd.print(msgArr[0]);
+     lcd.setCursor(0, 1);
+     lcd.print(msgArr[1]);
+} 
