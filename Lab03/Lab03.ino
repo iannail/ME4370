@@ -1,5 +1,5 @@
 // AUTHORS: A. LOGAN BARBER; IAN NAIL
-// FILE NAME: Lab02.ino
+// FILE NAME: Lab00.ino
 // LAST UPDATED: 28 JANUARY 2022
 /*
  *  PURPOSE: THIS FILE IS THE MAIN FILE FOR DISPLAYING A RECIPE ON AN LCD AND BEING ABLE TO SCROLL USING TWO BUTTONS.
@@ -99,6 +99,50 @@
   *      PORT: A
   *      PORT PIN: 3
   */
+
+  /*
+   * KEY PAD:
+   * 
+   * PIN 1: 
+   *      DIGITAL PIN: 37
+   *      PORT: C
+   *      PORT PIN: 0
+   *      
+   * PIN 2:
+   *      DIGITAL PIN: 36
+   *      PORT: C
+   *      PORT PIN: 1
+   *      
+   * PIN 3:
+   *      DIGITAL PIN: 35
+   *      PORT: C
+   *      PORT PIN: 2
+   *      
+   * PIN 4:
+   *      DIGITAL PIN: 34
+   *      PORT: C
+   *      PORT PIN: 3
+   *      
+   * PIN 5:
+   *      DIGITAL PIN: 33
+   *      PORT: C
+   *      PORT PIN: 4
+   *      
+   * PIN 6:
+   *      DIGITAL PIN: 32
+   *      PORT: C
+   *      PORT PIN: 5
+   *      
+   * PIN 7:
+   *      DIGITAL PIN: 31
+   *      PORT: C
+   *      PORT PIN: 6
+   *      
+   * PIN 8:
+   *      DIGITAL PIN: 30
+   *      PORT: C
+   *      PORT PIN: 7
+   */
  
 // INCLUDE LIBRARIES
 #include <LiquidCrystal_I2C.h>
@@ -206,6 +250,10 @@ void setup()
      // SETUP PORT B AS OUTPUT FOR THE LCD
      DDRB = 0xFF;
      PORTB = 0x00;
+
+     // SET UP PORT C AS OUTPUT AND INPUT
+     DDRC = 0xF0;
+     PORTC = 0x00;
 
      // CALCULATE INDIVIDUAL DIGITS
      totalMinutes = totalSeconds/60;
@@ -395,35 +443,44 @@ void pickNumber(int x) //changes value of number
 {
      switch(x)
      {
-          default: 
-               PORTB = ZERO; 
-               break;
           case 1: 
                PORTB = ONE; 
                break;
+          
           case 2: 
                PORTB = TWO; 
                break;
+          
           case 3: 
                PORTB = THREE; 
-            break;
+               break;
+          
           case 4: 
                PORTB = FOUR; 
                break;
+          
           case 5: 
                PORTB = FIVE; 
                break;
+          
           case 6: 
                PORTB = SIX; 
                break;
+          
           case 7: 
                PORTB = SEVEN; 
                break;
+          
           case 8: 
                PORTB = EIGHT; 
                break;
+          
           case 9: 
                PORTB = NINE; 
+               break;
+
+          default: 
+               PORTB = ZERO; 
                break;
      }
 }
