@@ -2,7 +2,7 @@
 
 PAPER=Lab02-Barber-Nail.tex  # set the path to your TeX file here
 
-CLEAN: PAPER## Clean output files
+CLEAN: PAPER  				# Clean output files
 	sh clean.sh
-PAPER:  ## Compile pdf
-	pdflatex Lab02-Barber-Nail.tex
+PAPER:  					# Compile pdf
+	pdflatex Lab03-Barber-Nail.tex
