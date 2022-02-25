@@ -1,0 +1,23 @@
+\section{Executive Summary}
+In this lab, the objective is to write a program to use hardware pushbuttons for a passcode program that requires the user to make a passcode and then enter that passcode to unlock the recipe.
+
+The minimum objectives were:
+\begin{enumerate}
+\item Prompt the user to enter a 4 digit passcode
+\item The passcode is entered using hard wired pushbuttons.
+\item Save the 4 numbers into memory
+\item Once the passcode has been entered the safe needs to be closed. For a recipe book, this can be  a display, "Recipe locked".
+\item Prompt the user to press any switch to unlock the safe.
+\item Prompt the user enter their passcode
+\item Check the passcode, open if correct, do not open if incorrect.
+\item Allow the user to enter the entire passcode before checking it.
+\item Allow the user up to three attempts, if they fail on the third attempt, display failure message, and end the program without opening.
+\item When the passcode succeeds, you can continue to the recipe. 
+\end{enumerate}
+The seven segment 4 display for the timer and the LCD display program from Lab02 was carried over as the basis for implementing the keypad into a better rounded project.
+
+To get an input from the keypad, the button matrix is scanned one row and column at a time as the program searches for a button press. Two 'for loops' are used to iteratively do the row and column search. The keypad has 16 buttons, so 4 rows and 4 columns needed 8 bits. PORTC was used with 4 bits as inputs and 4 bits as outputs. The inputs bits had the pull-up resistor enabled. The pull-up resistors were used for reading active lows when a button press occurs. The 16 buttons are scanned so quickly that it is very challenging to not have a button press registered. Debouncing code is used to to hold the processor in an infinite loop until the button is released. This prevents a single button press from being interpreted as multiple button presses.
+A 'do while' loop is used for setting the password and another 'do while' loop used for checking the entered password matched the password that had been set. After three failed password attempts the program gives a message and fails to continue. While the password is being set or entered, the LCD screen shows the characters from the button presses so the user can see that each button was registered. The pound sign is used to end the password that is entered.
+If a password is successful the program will continue on to give the recipe instructions and the timer becomes available to use.
+
+AutoCad was used to draw up the circuit diagram of all the connections, components, and devices used.
