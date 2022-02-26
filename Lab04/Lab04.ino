@@ -6,10 +6,9 @@
  * The sensor is an SHARP 2Y0A02 F 18
  * Measuring distance: 20 to 150 cm
  * Matlab code for the measurements of IRsensor 
- * IRsensor = [1/562 1/456 1/356 1/295 1/248 1/237 1/223 1/206 1/170 1/156 1/138];
- * distance = [21 30 40 50 60 70 80 90 100 110 140];
- * p = polyfit(IRsensor,distance,1)
- * -> p = 20.8833e3 -17.8902
+ * IRsensor = [1/796 1/768 1/645 1/552 1/492 1/444 1/390 1/357 1/310 1/265 1/247 1/227 1/201 1/193 1/182];
+ * distance = [20 25 30 35 40 46 52 59 67 77 91 102 112 130 142];
+ *
  */
 // INCLUDE LIBRARIES
 #include <LiquidCrystal_I2C.h>
@@ -35,15 +34,15 @@ LiquidCrystal_I2C lcd(ADDRESS, LCDCOLS, LCDROWS);
 void setup() {
 
 // Setup ATD:
-//Use AVREF as ADC reference, 10 bit reading, Set MUX 4-0 as 0 for ADC pin 0
-	ADMUX = 0b01000000;
+// We used external AVREF as ADC reference with 3.3V wired to the pin, 10 bit reading, Set MUX 4-0 as 0 for ADC pin 0
+	ADMUX = 0b00000000;
 // Enable ADC
 // Don't start conversions yet
 // DOn't autrigger, clear flag, Dont enable interrupt
-// Prescalers are 100 for divide by 16 prescale
+// Prescalers are 000 for divide by 2 prescale
 	ADCSRA = 0b10010000;
 	ADCSRB = 0b00000000; // for ADC0
-//Begin serial and confirmation message
+// Begin serial and confirmation message
 	Serial.begin(9600); // init serial
 	Serial.println("Serial Connected");
 
@@ -54,14 +53,14 @@ void setup() {
 }
 
 void loop() {
- value_ADC0 = average_Distance();
- //Distance_ADC0 = -79.544*log(value_ADC0) + 511.9;
+ value_ADC0 = average_Distance(); // Gets the average value from 15000 samples
+ Distance_ADC0 = 73116*pow(value_ADC0,-1.213) + 6; // equation calculated in excel
 
- ///Distance_ADC0 =  2*9462/(value_ADC0 - 8.5);
+ //Distance_ADC0 = 26632.2/value_ADC0 - 14.3366 + 10;
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Distance ");
-  lcd.print(value_ADC0);
+  lcd.print(Distance_ADC0);
   delay(200);
 }
 
@@ -71,7 +70,7 @@ void loop() {
  * RETURN: uint32_t
  * NUMBER OF PARAMETERS: 0
  * PARAMETER NAMES: void
- * PURPOSE: This function returns the average reading from the IR sensor
+ * PURPOSE: This function returns the average reading from the IR sensor from 15000 samples
  */
 uint32_t average_Distance(){
   uint32_t u32_index;
