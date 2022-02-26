@@ -2,20 +2,26 @@
  * FILE NAME: Lab04.ino
  * LAST UPDATED: 25 February 2022
  *
- *  PURPOSE: THIS IS THE MAIN FILE FOR TAKING AN ANOLOG INPUT FROM A IR DISTANCE SENSOR AND DISPLAYING THE DISTANCE ON THE LCD.
- *
+ * PURPOSE: THIS IS THE MAIN FILE FOR TAKING AN ANOLOG INPUT FROM A IR DISTANCE SENSOR AND DISPLAYING THE DISTANCE ON THE LCD.
+ * The sensor is an SHARP 2Y0A02 F 18
+ * Measuring distance: 20 to 150 cm
+ * Matlab code for the measurements of IRsensor 
+ * IRsensor = [1/562 1/456 1/356 1/295 1/248 1/237 1/223 1/206 1/170 1/156 1/138];
+ * distance = [21 30 40 50 60 70 80 90 100 110 140];
+ * p = polyfit(IRsensor,distance,1)
+ * -> p = 20.8833e3 -17.8902
  */
 // INCLUDE LIBRARIES
 #include <LiquidCrystal_I2C.h>
-#include <Wire.h>
 #include <stdio.h>
+#include <math.h>
 #define TRUE 0x01
 #define FALSE 0x00
 
 
 // Global Variables
-uint32_t value_ADC0 = 0;
-uint32_t Distance_ADC0 = 0;
+float value_ADC0 = 0;
+float Distance_ADC0 = 0;
 uint32_t low = 0;
 uint32_t high = 0;
 
@@ -27,19 +33,15 @@ uint32_t high = 0;
 LiquidCrystal_I2C lcd(ADDRESS, LCDCOLS, LCDROWS);
 
 void setup() {
-// SETUP PORT B AS OUTPUT FOR THE LCD
-  DDRB = 0x7F; // 0b01111111
-  PORTB = 0x00;
 
 // Setup ATD:
 //Use AVREF as ADC reference, 10 bit reading, Set MUX 4-0 as 0 for ADC pin 0
 	ADMUX = 0b01000000;
-
 // Enable ADC
 // Don't start conversions yet
 // DOn't autrigger, clear flag, Dont enable interrupt
 // Prescalers are 100 for divide by 16 prescale
-	ADCSRA = 0b10010100;
+	ADCSRA = 0b10010000;
 	ADCSRB = 0b00000000; // for ADC0
 //Begin serial and confirmation message
 	Serial.begin(9600); // init serial
@@ -52,18 +54,17 @@ void setup() {
 }
 
 void loop() {
-	Distance_ADC0 = average_Distance();
-//Distance_ADC0 = float(16569/(value_ADC0+25)-7);
+ value_ADC0 = average_Distance();
+ //Distance_ADC0 = -79.544*log(value_ADC0) + 511.9;
+
+ ///Distance_ADC0 =  2*9462/(value_ADC0 - 8.5);
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("Hello");
-  delay(500);
-	Serial.print("ADC0");
-	Serial.print("\t");
-	Serial.print(Distance_ADC0);
-	Serial.print("\n\r");
-	delay(100);
+  lcd.print("Distance ");
+  lcd.print(value_ADC0);
+  delay(200);
 }
+
 /*
  * TYPE: FUNCTION
  * NAME: average_Distance
@@ -75,7 +76,7 @@ void loop() {
 uint32_t average_Distance(){
   uint32_t u32_index;
   uint32_t u32_average_distance = 0;
-  for(u32_index = 0; u32_index < 5000; u32_index++) {
+  for(u32_index = 0; u32_index < 15000; u32_index++) {
     ADCSRA |= 0b01000000; // Start ADC Conversion
     while((ADCSRA & 0b00010000)==0); // Stays in while loop while conversion is happening
     low  = ADCL;
@@ -83,6 +84,6 @@ uint32_t average_Distance(){
     value_ADC0 = (high << 8) | low;
     u32_average_distance = u32_average_distance + value_ADC0;
   }
-  u32_average_distance = u32_average_distance/5000;
+  u32_average_distance = u32_average_distance/15000;
 return u32_average_distance;
 }
