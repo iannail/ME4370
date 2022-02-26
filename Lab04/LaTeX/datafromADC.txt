@@ -1,0 +1,10 @@
+\section{Analog to Digital Conversion}
+To create a function to convert the raw data from the analog input data points were measured. The IR sensor was setup and the input raw input was read from the converter onto the serial monitor. 15 different distances and points for taken. This data was placed into Excel. A scatter plot was made from the points.
+
+\begin{figure}[h!]
+  \center
+  \includegraphics[width=0.7\textwidth]{PlotOfData.png}
+  \caption{Plot of Points from Raw ADC data}
+\end{figure}
+
+The equation in the figure is a line fit power equation from Excel. This equation was used in the c code to fit change the sensor data into a centimeter measurement.
