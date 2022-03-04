@@ -1,0 +1,17 @@
+\section{Executive Summary}
+In this lab, the objective is to use the Arduino Mega 2560 to read in analog values from an infrared distance sensor.  A program was
+written to convert the analog values to the distance in centimeters.  To determine an equation that will successfully convert the raw
+analog values to a distance, distance and analog value measurements were taken.  The data was plotted into Excel where a line of best fit
+was determined.
+
+The minimum objectives were:
+\begin{enumerate}
+\item Application must use Sharp GP IR ranger with analog output
+\item Must demonstrated a resolution of .5 cm or better 
+\item Must display measured distance in cm (best) or inches
+\item Must have some output that makes use of the range sensor information 
+\item Implement and demonstrate in a product application
+\item Demo to lab assistant, instructor or other person with mechatronics background, document in your report.
+\item Test your product on someone outside the class, record their use of your product, discuss outcomes in your report.
+\end{enumerate}
+
