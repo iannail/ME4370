@@ -1,5 +1,5 @@
 \section{Analog to Digital Conversion}
-To create a function to convert the raw data from the analog input data points were measured. The IR sensor was setup and the input raw input was read from the converter onto the serial monitor. 15 different distances and points for taken. This data was placed into Excel. A scatter plot was made from the points.
+To create a function to convert the raw data from the analog input data points were measured. The Joystick sensor was setup and the input raw input was read from the converter onto the serial monitor. 15 different distances and points for taken. This data was placed into Excel. A scatter plot was made from the points.
 
 \begin{figure}[h!]
   \center
