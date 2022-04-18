@@ -1,0 +1,4 @@
+\newcommand\Lab{Lab06} 			% Change lab number to current lab
+\title{Lab 06 \\\textbf{Stepper Motor Pulley Control}}	% Change Lab title and subtitle
+\author{Logan Barber, Ian Nail}
+\date{\today}
