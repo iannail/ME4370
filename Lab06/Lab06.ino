@@ -64,28 +64,28 @@ void setup()
     // SETUP BUTTON PINS AS INPUTS
     // ENABLE INTERNAL PULL-UP RESISTOR FOR BUTTONS
     DDRA = 0x00; // 0b00000000
-    PORTA = 0x07; // 0b00000011
+    PORTA = 0x03; // 0b00000011
 }
 
 
 // RUN THIS CODE FOREVER
 void loop()
 {
-
-  // IF BUTTON0 IS LOW CHANGE STATE
-  if((PINA & 0x01) == 0x01)
-  {
-      u8_state = 1;
-  }
-
-  // ELSE IF BUTTON1 IS LOW CHANGE STATE
-  else if((PINA & 0x02) == 0x02)
-  {
-      u8_state = 2;
-  }
-  else{
-    u8_state = 0;
-  }
+    // IF BUTTON0 IS LOW CHANGE STATE
+    if((PINA & 0x01) == 0x00)
+    {
+        u8_state = 1;
+    }
+    
+    // ELSE IF BUTTON1 IS LOW CHANGE STATE
+    else if((PINA & 0x02) == 0x00)
+    {
+        u8_state = 2;
+    }
+    else
+    {
+        u8_state = 0;
+    }
 
     // FORWARD
     if(u8_state == 1)
@@ -124,7 +124,7 @@ void loop()
     }
 
     // BACKWARD
-    else if( u8_state == 2)
+    else if(u8_state == 2)
     {
          // TURN ON IN4
         PORTB |= 0x08; // 0b00001000
