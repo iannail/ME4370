@@ -1,4 +1,4 @@
-\newcommand\Lab{Lab04} 			% Change lab number to current lab
-\title{Lab 04 \\\textbf{Analog To Digital Converter}}	% Change Lab title and subtitle
+\newcommand\Lab{Lab05} 			% Change lab number to current lab
+\title{Lab 05 \\\textbf{Pulse Width Modulation}}	% Change Lab title and subtitle
 \author{Logan Barber, Ian Nail}
 \date{\today}

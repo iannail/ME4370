@@ -1,17 +1,8 @@
 \section{Executive Summary}
-In this lab, the objective is to use the Arduino Mega 2560 to read in analog values from an infrared distance sensor.  A program was
-written to convert the analog values to the distance in centimeters.  To determine an equation that will successfully convert the raw
-analog values to a distance, distance and analog value measurements were taken.  The data was plotted into Excel where a line of best fit
-was determined.
+In this lab, the objective is to use the Arduino Mega 2560 to develop a product that makes use of the servo motors with a Pulse Width Modulated (PWM) signal. Two servo motors are used in making a robot arm. A joystick was used as the controller to the robot arm.
 
-The minimum objectives were:
-\begin{enumerate}
-\item Application must use Sharp GP IR ranger with analog output
-\item Must demonstrated a resolution of .5 cm or better 
-\item Must display measured distance in cm (best) or inches
-\item Must have some output that makes use of the range sensor information 
-\item Implement and demonstrate in a product application
-\item Demo to lab assistant, instructor or other person with mechatronics background, document in your report.
-\item Test your product on someone outside the class, record their use of your product, discuss outcomes in your report.
-\end{enumerate}
+Servos are extremely useful in robotics. The motors are small, have built-in control circuitry, and are extremely powerful for their size. The output shaft of the servo is capable of traveling around 180 degrees.
 
+To make use of the PWM functionality of the Mega 2560, the correct clock and compare bits need to be set. The data sheet of the ATMEGA 2560 gives instructions on the register values required for the different options. The fast PWM with a 256 pre-scaler is used. Two PWM signals are used to control two servo motors. One servo motor on PH6 and the other on PB5. The servo motors move according to the duty cycle of the PWM signal. If the duty cycle is 0\%, the motor moves to the 0 degree position. If the duty cycle is 50\%, it moves to the 180 degree position. The duty cycle is changed by setting the OCRxx bit to a new value, were xx is the timer and pin connection. OCR1A is Timer 1 and channel A that is mapped to PB5.
+
+The joystick is what controls the movement of the motors. The joystick values are read from the analog to digital pins. The joystick is capable of y direction and x direction. The voltages are sent to the ADC pins and converted into signals to use in software. The software take the signals and makes decisions on which direction to move the servo motors. 
