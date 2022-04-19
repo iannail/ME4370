@@ -1,2 +1,0 @@
-\section{Analog to Digital Conversion}
-The Joystick is powered with 5 Vdd and GND. When the stick is moved analog voltages change on Vrx and Vry according to the movement of the stick. These analog values are sent to the ADC pins and the conversion to a digital number happens. That digital number is displayed onto the LCD. The software makes decisions on if the servo motor should be moved when the joystick is pressed.

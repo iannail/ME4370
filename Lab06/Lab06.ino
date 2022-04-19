@@ -48,7 +48,7 @@
 
 
 /********** D E F I N E S **********/
-#define DELAY 850
+#define DELAY 950
 uint8_t u8_state = 0;
 
 /********** G L O B A L  V A R I A B L E S **********/
