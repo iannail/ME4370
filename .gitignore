@@ -1,6 +1,16 @@
 # Prerequisites
 *.d
 
+# old labs 
+**/Lab01
+**/Lab02
+**/Lab03
+**/Lab04
+**/Lab05
+**/Lab06
+
+
+
 # Compiled Object files
 *.slo
 *.lo
@@ -30,3 +40,8 @@
 *.exe
 *.out
 *.app
+
+# Misc
+*.DS_Store
+*.vscode/
+**/build
