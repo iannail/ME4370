@@ -4,11 +4,14 @@
  * TX is digital pin (Transmit) (connect to RX of other device)
  */
 /* I N C L U D E S */
-//#include <SoftwareSerial.h> // On ATmega 328(Uno) based Arduinos AltSoftSerial uses pin 8 for RX and pin 9 for TX
+#include <LiquidCrystal_I2C.h>
 
 
 /* D E F I N E S */
-
+// DEFINE PIN NUMBERS
+#define ADDRESS 0x27
+#define COLS 16
+#define ROWS 2
 #define baud 9600
 
 /* G L O B A L S */
@@ -22,22 +25,27 @@ uint8_t i_index = 0;
 uint8_t u8_command_state = 3;
 uint8_t u8_motor1_state = 0;
 uint8_t u8_motor2_state = 0;
-
-
-
-
-unsigned int calibrate_x = 175;
-unsigned int calibrate_y = 120;
-unsigned int calibrate_area = calibrate_y *  calibrate_x;
-
+char message0[] = "Motor1";
+char message1[] = "Motor2";
 
 /* S E T U P */
+
+// CREATE LiquidCrystal OBJECT
+LiquidCrystal_I2C lcd(ADDRESS, COLS, ROWS);
+
 void setup() //run once
 {
 
 	// Start the serial connection with the HM-10 bluetooth module
 	Serial1.begin(baud,SERIAL_8N1);
+ 
+     // INITIALIZE THE LCD SCREEN
+     lcd.begin();
 
+     // PRINT MESSAGE
+     lcd.print(message0);
+     lcd.setCursor(0, 1);
+     lcd.print(message1);
 }
 
 
@@ -67,8 +75,8 @@ void loop() // run over and over
     }
 
 		//Write to motor control
-		Serial2.write(u8_motor1_speed);
-		Serial2.write(u8_motor3_speed);
+		Serial1.write(u8_motor1_speed);
+		Serial1.write(u8_motor3_speed);
 
 }
 
