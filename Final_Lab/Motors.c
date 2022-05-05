@@ -27,13 +27,28 @@ uint8_t u8_stop_byte = 194;
 /* S E T U P */
 void setup() //run once
 {
-  // setup timer 1
-  TCCR1A = 0b00000000; // see notes, normal mode
-  TCCR1B = 0b00000100; // normal mode divide clock by 1
-  TIMSK1 = 0b00000000; // no interrupts
+    // setup timer 1
+    TCCR1B = 0b00000100; // normal mode divide clock by 1
+    TIMSK1 = 0b00000000; // no interrupts
   
-  // Start the connection to the bluetooth module
-  Serial1.begin(baud,SERIAL_8N1);
+    // Start the connection to the bluetooth module
+    Serial1.begin(baud,SERIAL_8N1);
+
+    // SET UP PINS FOR OUTPUT
+    DDRB |= 1<<PB7;
+    DDRH |= 1<<PH6;
+    
+    // USE TCNT1  
+    TCCR0A = 0b10000011; // non-inverted mode, 8 bit fast PWM
+    TCCR0B = 0b00001100; // (I/O clk)/256 (From prescaler) 
+    
+    // USE TCNT2  
+    TCCR2A = 0b10000011; // non-inverted mode, 8 bit fast PWM
+    TCCR2B = 0b00001100; // (I/O clk)/256 (From prescaler) 
+    
+    // PWM COUNTER
+    OCR0A = 0; 
+    OCR2B = 0;  
 
 
 }
@@ -52,6 +67,9 @@ void loop() // run over and over
       }
       
     }
+    OCR0A = u8_motor1_speed;
+    OCR2B = u8_motor2_speed;
+
     
    
 
