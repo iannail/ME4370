@@ -1,0 +1,4 @@
+
+\title{Final Lab Report \\\textbf{Bluetooth Motor Control System}}	% Change Lab title and subtitle
+\author{Logan Barber, Ian Nail}
+\date{\today}
