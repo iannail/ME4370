@@ -1,8 +1,25 @@
-\section{Executive Summary}
-In this lab, the objective is to use the Arduino Mega 2560 to develop a product that makes use of a stepper motor. The stepper motor is the driving mechanism for a pulley system. Two buttons control the direction of the stepper motor.  One of the buttons will make the pulley go up and the other will make the pulley go down.
+\section{Introduction}
+In this final lab, the objective was to use two microcontrollers connected through Bluetooth to control two "fans". The fans are two motors that are speed controlled with potentiameters. Additionally, two sensors are used to turn the motors off at any moment given object detection. This system demonstrates the remote control of motors and the use of object detection using proximity and motions sensors for a safety systems. 
 
-Stepper motors are extremely useful in mechatronic systems.  Stepper motors are not useful for high speed systems, but good for simple low speed systems; at low speeds, stepper motors have high torque.  Stepper motors are useful due their very accurate open-loop control system, however, this comes at the expense of weight.  Stepper motors are very heavy since they have magnets with coils of wire in them.  An advantage of stepper motors is that, if one of the coils is powered, it takes a very large external force to rotate the shaft.  This is because the electromagnetic force will lock onto the shaft's magnet causing this locking effect.
+Several analog to digital conversions take place to operate this system. The potentiameters are analog inputs converted into a digital number between 0 and 250. Where 0 is the motor stopped and 250 is the motor at max speed. A total of two potentiameters, each controls one of the two motors.
 
-We used the ULN2003 Stepper Motor Driver PCB to as the driver. The driver board accepts a four bit command from the microcontroller and in turn applies the necessary power pulse to step the motor. At the heart of the driver is a ULN2003AN integrated circuit. The board can supply between 5V to 12V to the motor from an independent power supply. It also has a bank of LED’s that correspond to the input signals received from the controller. They provide a nice visual when stepping.
+The sensors are also analog inputs converted into a digital signals. Two sensors were used. The SHARP 2Y0A02F18 IR distance sensor and the HC-SR501 IR motion sensor. The distance sensor was used to turn off motor1 if it detected an object within 20 cm. The motion sensor was used to turn off motor2 if motion was detected in the sensors field of view.
 
-The motor steps when a specific combination of inputs are driven from the microcontroller. This is just a pulse of power, just enough to get the motor to step. This driver uses a very simple protocol. Applying a signal to an input pin causes power to be sent to the motor on a corresponding wire. 
+Two HM-10 bluetooth modules were used to communicate data from system to system. The bluetooth modules were configured to pair with one another and with the serial UART TX and RX connection with the microcontroller.
+
+Demonstration of this system can be viewed \href{https://youtu.be/fZUjRV97KJc}{on YouTube}  [1].
+
+
+This Lab report should contain the following:
+
+1. Cover page (1 page)
+Include title, date, authors, signature, recipient
+2. Introduction 
+3. Procedure for design
+4. Procedure for development / construction
+5. Assessment
+6. Conclusions
+7. References
+8. Appendix 1: Circuit diagram
+9. Appendix 2: Program Flowchart
+10. Appendix 3: Program listing

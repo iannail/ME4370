@@ -5,6 +5,7 @@
 \usepackage{graphicx} % Handle inclusion of non-PDF graphics
 \usepackage{subfig} % Allow sub-figures inside a figure
 \usepackage{enumitem} % Allow lists to pick up numbering where the last list left off
+\usepackage{hyperref}
 
 % Change margins
 \usepackage[margin=20mm]{geometry}
@@ -94,7 +95,37 @@ ME-4370 - Stephen Canfield
   \includegraphics[width=\textwidth]{connectionsimage_motors.png}
   \caption{Breadboard and Connections}
 \end{figure}
-\input{section_notes.txt}
+
+\section{Design}
+The electrical components used in the system are as follows:
+\begin{flushleft}
+
+\begin{tabular}{cccc@{}}
+\hline
+Quantity  & Model & Description \\
+ \hline
+2  & Arduino Atmega 2560  & Microcontoller \\
+2 & HM-10 & Low Energy Bluetooth modules \\
+2 & 10k Generic Potentiometer & Variable Resistor \\
+2  & Gikfun DC Motor & 3-6 Volt DC Motor \\
+\end{tabular}
+\end{flushleft}
+
+\section{Development} 
+\input{Development.txt}
+
+\section{Assessment} 
+\input{Assessment.txt}
+
+\section{Conclusions} 
+\input{Conclusions.txt}
+
+\section{References}
+\input{Development.txt} 
+
+\section{Appendix i: Circuit diagram} %  Create a section 
+
+\section{Appendix ii: Program Flowchart} 
 
 %\begin{figure}[h!]
 %\centering
@@ -104,9 +135,8 @@ ME-4370 - Stephen Canfield
 %\pagebreak
 % Include code from a file with filename indicated
 
-
 \clearpage
-\section{Source Code - Remote Control} %  Create a section
+\section{Appendix iii: Source Code - Remote Control} %  Create a section
 This section contains the source code from the microcontroller reading potentiometers and the sensors to control the speed of the motors, and then sending the speeds over bluetooth to the motor control microcontroller.
 \vspace{5mm}
 \linespread{1}
@@ -115,7 +145,7 @@ This section contains the source code from the microcontroller reading potentiom
 \vspace{5mm}
 
 
-\section{Source Code - Motor Control} %  Create a section
+\section{Appendix iv: Source Code - Motor Control} %  Create a section
 This section contains the source code from the microcontroller controlling the two motors.
 \vspace{5mm}
 \linespread{1}
