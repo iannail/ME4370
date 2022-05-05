@@ -9,7 +9,11 @@
 **/Lab05
 **/Lab06
 
-
+# tex extensions
+*.gz
+*.aux
+*.log
+*.bak
 
 # Compiled Object files
 *.slo
