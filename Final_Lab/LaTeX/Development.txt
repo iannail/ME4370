@@ -1,0 +1,3 @@
+The construction in this project is constructed as shown in figures \ref{fig:circuitDiagram},
+\ref{fig:sensors}, and \ref{fig:motors}.  The IC chip in \ref{fig:motors} is an L293D motor driver;
+reference the data sheet for the pinout.
