@@ -1,0 +1,8 @@
+To test the system, we waved an object in front of the motion sensor to see if the
+corresponding motor turned off.  We also waved an object in front of the IR distance sensor
+to see if the corresponding motor turned off. At first the system did not work, so we made adjustments
+in the code.  We initially used 8-bit PWM, but it did not work.  We used 10-bit fast PWM and it worked.
+Since the bluetooth module can only send a byte at a time, we had to scale the 10-bit number received from
+the ADC to an 8-bit number.  To do this, we divided the 10-bit number by 4.  When the Arduino that
+controls the motors received a byte from the bluetooth communication, it multipied the data by 4 to
+unscale the number.
